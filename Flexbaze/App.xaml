@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Flexbaze.App">
+    <Application.Resources>
+        <Color x:Key="TextMasterMenu">#ffffff</Color>
+        <Color x:Key="BackLogoMaster">#00509e</Color>
+        <Color x:Key="primary-back-title-color">#101630</Color>
+        <Color x:Key="primary-title-color">#ffffff</Color>
+        <Color x:Key="Flexbaze-Green">#00a889</Color>
+        <Color x:Key="Flexbaze-Yellow">#ea8800</Color>
+        <Color x:Key="Flexbaze-Red">#d2434a</Color>
+        <Color x:Key="Ovetek-Orange">#ff810d</Color>
+        <Color x:Key="Button-Bottom-Menu">#00509e</Color>
+        <Color x:Key="colorAccent">#00509e</Color>
+        <Color x:Key="main">#101630</Color>
+        <Color x:Key="dark">#202850</Color>
+        <Color x:Key="bright">#336ef4</Color>
+        <Color x:Key="dropDark">#151d4c</Color>
+
+        <Style x:Key="BotonMasterMenu" TargetType="Button">
+            <Setter Property="TextColor" Value="{StaticResource TextMasterMenu}" />
+            <Setter Property="FontFamily" Value="Muli" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+        </Style>
+
+        <Style ApplyToDerivedTypes="True" TargetType="ContentPage">
+            <Setter Property="NavigationPage.BackButtonTitle" Value="" />
+            <Setter Property="BackgroundColor" Value="{StaticResource Key=primary-back-title-color}"/>
+        </Style>
+
+        <Style ApplyToDerivedTypes="True" TargetType="NavigationPage">
+            <Setter Property="BarBackgroundColor" Value="{StaticResource Key=primary-back-title-color}"/>
+            <Setter Property="BarTextColor" Value="{StaticResource Key=primary-title-color}"/>
+            <Setter Property="NavigationPage.BackButtonTitle" Value=""/>
+        </Style>
+
+        <ResourceDictionary>
+            <OnPlatform x:Key="Muli" x:TypeArguments="x:String">
+                <On Platform="Android" Value="muli.regular.ttf#muli"/>
+                <On Platform="iOS" Value="muli.regular"/>
+            </OnPlatform>
+            <Style TargetType="StackLayout">
+                <Setter Property="BackgroundColor" Value="#101630" />
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontFamily" Value="{StaticResource Key=Muli}" />
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="BackgroundColor" Value="#101630" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontFamily" Value="{StaticResource Key=Muli}" />
+                <Setter Property="PlaceholderColor" Value="White" />
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontFamily" Value="{StaticResource Key=Muli}" />
+                <Setter Property="BackgroundColor" Value="#151d4c" />
+            </Style>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="#101630" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

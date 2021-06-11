@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:Conv="clr-namespace:Flexbaze.Converters"
+             xmlns:resources="clr-namespace:Flexbaze.Resources"
+             mc:Ignorable="d"
+             x:Class="Flexbaze.Views.Notifications">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Conv:StringToColorConverter  x:Key="SyncStatusConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal"
+                VerticalOptions="Center"
+                Padding="0,0,40,0"
+                Spacing="10">
+            <Label
+                   Text="{x:Static resources:AppResources.NotificationsTitle}"
+                   TextColor="White"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   VerticalTextAlignment="Center"
+                   HorizontalOptions="CenterAndExpand"/>
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical">
+            <StackLayout Orientation="Horizontal"
+                         BackgroundColor="Transparent"
+                         HorizontalOptions="FillAndExpand"
+                         Padding="10,10,10,10">
+                <Button Text="{x:Static resources:AppResources.UnreadLabel}"
+                        BackgroundColor="{Binding BtnNewColor}"
+                        BorderColor="{StaticResource bright}"
+                        BorderWidth="1"
+                        Visual="Material"
+                        HorizontalOptions="FillAndExpand"
+                        Command="{Binding FilterAlerts}"
+                        CommandParameter="news"/>
+                <Button Text="{x:Static resources:AppResources.AllLabel}"
+                        BackgroundColor="{Binding BtnAllColor}"
+                        BorderColor="{StaticResource bright}"
+                        BorderWidth="1"
+                        Visual="Material"
+                        HorizontalOptions="FillAndExpand"
+                        Command="{Binding FilterAlerts}"
+                        CommandParameter="all"/>
+            </StackLayout>
+            <StackLayout Orientation="Vertical"
+                         BackgroundColor="Transparent"
+                         VerticalOptions="FillAndExpand"
+                         Margin="10,0,10,0">
+                <ListView
+                    IsPullToRefreshEnabled="false"
+                    RowHeight="100"
+                    RefreshCommand="{Binding Refresh}"
+                    HasUnevenRows="false"
+                    SeparatorVisibility="None"
+                    HeightRequest="{Binding HeightListViewSupport}"
+                    ItemsSource="{Binding FilterAlertList}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame BackgroundColor="{StaticResource dropDark}"
+                                    Margin="10,5,10,5"
+                                    Padding="0">
+                                    <Frame.GestureRecognizers>
+                                        <SwipeGestureRecognizer Direction="Right"
+                                            Command="{Binding CmdSwipe}"
+                                            CommandParameter="{Binding Node}"/>
+                                    </Frame.GestureRecognizers>
+                                    <StackLayout Orientation="Horizontal"
+                                        BackgroundColor="Transparent"
+                                        VerticalOptions="FillAndExpand"
+                                        HorizontalOptions="FillAndExpand">
+                                        <BoxView BackgroundColor="{Binding Status, 
+                                            Converter={StaticResource SyncStatusConverter}}"
+                                            WidthRequest="5"/>
+                                        <StackLayout Orientation="Vertical"
+                                            BackgroundColor="Transparent"
+                                            VerticalOptions="FillAndExpand"
+                                            HorizontalOptions="FillAndExpand">
+                                            <StackLayout Orientation="Horizontal"
+                                                BackgroundColor="Transparent"
+                                                HorizontalOptions="FillAndExpand">
+                                                <Image Source="{Binding Icon}"
+                                                    HorizontalOptions="Start"
+                                                    Margin="5,5,5,0"/>
+                                                <Label Text="{Binding MsgCard}"
+                                                    FontSize="Small"
+                                                    HorizontalOptions="Start"
+                                                    Padding="0,5,5,0"/>
+                                                <Label Text="{Binding TimeLapse}"
+                                                    FontSize="Micro"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Padding="5,5,5,5"/>
+                                            </StackLayout>
+                                            <Label Text="{Binding Message}"
+                                                FontSize="Small"
+                                                LineBreakMode="WordWrap"
+                                                HorizontalTextAlignment="Start"
+                                                VerticalOptions="CenterAndExpand"
+                                                Padding="5,0,5,5"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

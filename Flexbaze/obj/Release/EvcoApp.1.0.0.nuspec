@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>EvcoApp</id>
+    <version>1.0.0</version>
+    <authors>EvcoApp</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Com.OneSignal" version="3.10.1" exclude="Build,Analyzers" />
+        <dependency id="GraphQL.Client" version="3.1.6" exclude="Build,Analyzers" />
+        <dependency id="Microcharts" version="0.8.5-pre" exclude="Build,Analyzers" />
+        <dependency id="Microcharts.Forms" version="0.8.5-pre" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="12.0.3" exclude="Build,Analyzers" />
+        <dependency id="Rg.Plugins.Popup" version="2.0.0.5" exclude="Build,Analyzers" />
+        <dependency id="SkiaSharp" version="2.80.2-preview.36" exclude="Build,Analyzers" />
+        <dependency id="SkiaSharp.Views.Forms" version="2.80.2-preview.36" exclude="Build,Analyzers" />
+        <dependency id="Xam.Plugins.Settings" version="4.1.0-beta" exclude="Build,Analyzers" />
+        <dependency id="Xamarin.Essentials" version="1.5.3.2" exclude="Build,Analyzers" />
+        <dependency id="Xamarin.Forms" version="4.7.0.1260" exclude="Build,Analyzers" />
+        <dependency id="Xamarin.Forms.InputKit" version="3.3.1" exclude="Build,Analyzers" />
+        <dependency id="Xamarin.Forms.Visual.Material" version="4.7.0.1260" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\GitHub\evco-mobile\EvcoApp\EvcoApp\bin\Release\netstandard2.0\es\EvcoApp.resources.dll" target="lib\netstandard2.0\es\EvcoApp.resources.dll" />
+    <file src="C:\GitHub\evco-mobile\EvcoApp\EvcoApp\bin\Release\netstandard2.0\EvcoApp.dll" target="lib\netstandard2.0\EvcoApp.dll" />
+  </files>
+</package>

@@ -1,0 +1,185 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\GitHub\\evco-mobile\\EvcoApp\\EvcoApp.iOS\\EvcoApp.iOS.csproj": {}
+  },
+  "projects": {
+    "C:\\GitHub\\evco-mobile\\EvcoApp\\EvcoApp.iOS\\EvcoApp.iOS.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\GitHub\\evco-mobile\\EvcoApp\\EvcoApp.iOS\\EvcoApp.iOS.csproj",
+        "projectName": "EvcoApp.iOS",
+        "projectPath": "C:\\GitHub\\evco-mobile\\EvcoApp\\EvcoApp.iOS\\EvcoApp.iOS.csproj",
+        "packagesPath": "C:\\Users\\Consiss\\.nuget\\packages\\",
+        "outputPath": "C:\\GitHub\\evco-mobile\\EvcoApp\\EvcoApp.iOS\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Consiss\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "xamarinios10"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "xamarinios10": {
+            "projectReferences": {
+              "C:\\GitHub\\evco-mobile\\EvcoApp\\EvcoApp\\EvcoApp.csproj": {
+                "projectPath": "C:\\GitHub\\evco-mobile\\EvcoApp\\EvcoApp\\EvcoApp.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "xamarinios10": {
+          "dependencies": {
+            "Xamarin.Essentials": {
+              "target": "Package",
+              "version": "[1.5.3.2, )"
+            },
+            "Xamarin.Forms": {
+              "target": "Package",
+              "version": "[4.7.0.1260, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    },
+    "C:\\GitHub\\evco-mobile\\EvcoApp\\EvcoApp\\EvcoApp.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\GitHub\\evco-mobile\\EvcoApp\\EvcoApp\\EvcoApp.csproj",
+        "projectName": "EvcoApp",
+        "projectPath": "C:\\GitHub\\evco-mobile\\EvcoApp\\EvcoApp\\EvcoApp.csproj",
+        "packagesPath": "C:\\Users\\Consiss\\.nuget\\packages\\",
+        "outputPath": "C:\\GitHub\\evco-mobile\\EvcoApp\\EvcoApp\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Consiss\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "Com.OneSignal": {
+              "target": "Package",
+              "version": "[3.10.1, )"
+            },
+            "GraphQL.Client": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Microcharts": {
+              "target": "Package",
+              "version": "[0.8.5-pre, )"
+            },
+            "Microcharts.Forms": {
+              "target": "Package",
+              "version": "[0.8.5-pre, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            },
+            "Rg.Plugins.Popup": {
+              "target": "Package",
+              "version": "[2.0.0.5, )"
+            },
+            "SkiaSharp": {
+              "target": "Package",
+              "version": "[2.80.2-preview.36, )"
+            },
+            "SkiaSharp.Views.Forms": {
+              "target": "Package",
+              "version": "[2.80.2-preview.36, )"
+            },
+            "System.Threading.Tasks.Extensions": {
+              "target": "Package",
+              "version": "[4.5.4, )"
+            },
+            "Xam.Plugins.Settings": {
+              "target": "Package",
+              "version": "[4.1.0-beta, )"
+            },
+            "Xamarin.Essentials": {
+              "target": "Package",
+              "version": "[1.5.3.2, )"
+            },
+            "Xamarin.Forms": {
+              "target": "Package",
+              "version": "[4.7.0.1260, )"
+            },
+            "Xamarin.Forms.InputKit": {
+              "target": "Package",
+              "version": "[3.3.1, )"
+            },
+            "Xamarin.Forms.Visual.Material": {
+              "target": "Package",
+              "version": "[4.7.0.1260, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

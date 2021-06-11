@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:resources="clr-namespace:Flexbaze.Resources"
+             mc:Ignorable="d"
+             x:Class="Flexbaze.Views.ChatView"
+             BackgroundColor="{StaticResource main}">
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal"
+            VerticalOptions="Center"
+            Padding="0,0,40,0"
+            Spacing="10">
+            <Label
+               Text="{x:Static resources:AppResources.ChatTitle}"
+               TextColor="White"
+               FontSize="14"
+               FontAttributes="Bold"
+               VerticalTextAlignment="Center"
+               HorizontalOptions="CenterAndExpand"/>
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackLayout Orientation="Horizontal"
+                BackgroundColor="Transparent"
+                HeightRequest="40"
+                Padding="0,0,10,10">
+                <Frame Margin="20,0,0,0"
+                    Padding="10,0,0,0"
+                    BackgroundColor="{StaticResource dropDark}"
+                    HorizontalOptions="FillAndExpand">
+                    <StackLayout Orientation="Horizontal"
+                        Padding="0"
+                        Margin="0"
+                        BackgroundColor="Transparent">
+                        <ImageButton Source="search.png"
+                            Padding="0"
+                            BackgroundColor="{StaticResource dropDark}"
+                            HorizontalOptions="Start"/>
+                        <Entry Placeholder="Buscar"
+                            Margin="0"
+                            BackgroundColor="{StaticResource dropDark}"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="End"
+                            VerticalTextAlignment="End"
+                            FontFamily="Muli"
+                            PlaceholderColor="{StaticResource TextMasterMenu}"/>
+                    </StackLayout>
+                </Frame>
+                <Button Text="+"
+                        BackgroundColor="{StaticResource dropDark}"
+                        FontSize="Title"
+                        FontFamily="Muli"
+                        TextColor="{StaticResource bright}"
+                        Padding="0"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        Margin="0"
+                        HorizontalOptions="End"
+                        VerticalOptions="Center"/>
+            </StackLayout>
+            
+            <CollectionView Grid.Row="1"
+                            HeightRequest="{Binding HeightListViewChat}"
+                            ItemsSource="{Binding ChatList}"
+                            SelectionMode="Single"
+                            SelectionChanged="ChatDetail">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Frame HasShadow="False"
+                                   IsClippedToBounds="True"
+                                   Grid.RowSpan="3"
+                                   Grid.Column="0"
+                                   Margin="20,10,10,10"
+                                   Padding="0"
+                                   CornerRadius="25">
+                                <Image Source="{Binding Picture}"
+                                   HeightRequest="50"
+                                   WidthRequest="50"/>
+                            </Frame>
+                            <Label Text="{Binding Name}"
+                                   Grid.Row="0"
+                                   Grid.Column="1"
+                                   FontSize="Small"
+                                   FontFamily="Muli"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="StartAndExpand"/>
+                            <Label Text="{Binding Hour}"
+                                   Grid.Row="0"
+                                   Grid.Column="2"
+                                   Margin="0,0,10,0"
+                                   FontSize="Micro"
+                                   FontFamily="Muli"
+                                   HorizontalOptions="End"/>
+                            <Label Text="{Binding Body}"
+                                   Grid.RowSpan="2"
+                                   Grid.Row="1"
+                                   Grid.Column="1"
+                                   Padding="0"
+                                   FontSize="Small"
+                                   FontFamily="Muli"
+                                   TextColor="{Binding BodyColor}"
+                                   HorizontalOptions="StartAndExpand"/>
+                            <Frame Grid.Row="1"
+                                   Grid.Column="2"
+                                   WidthRequest="16"
+                                   HeightRequest="16"
+                                   CornerRadius="8"
+                                   Padding="0"
+                                   IsClippedToBounds="True"
+                                   HasShadow="False"
+                                   IsVisible="{Binding HasNewMessages}"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   BackgroundColor="{StaticResource bright}">
+                                <Label Text="{Binding QtyMsgNew}"
+                                   FontSize="9"
+                                   Padding="0"
+                                   FontFamily="Muli"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

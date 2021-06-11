@@ -1,0 +1,372 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccidentsButton" xml:space="preserve">
+    <value>Accidentes</value>
+  </data>
+  <data name="AllCells" xml:space="preserve">
+    <value>Todas las celdas</value>
+  </data>
+  <data name="AllLabel" xml:space="preserve">
+    <value>Todas</value>
+  </data>
+  <data name="AssignLabel" xml:space="preserve">
+    <value>Asignar</value>
+  </data>
+  <data name="BestTeamLeaderLabel" xml:space="preserve">
+    <value>Mejor Jefe de Grupo</value>
+  </data>
+  <data name="BreakDownLabel" xml:space="preserve">
+    <value>DESGLOSE</value>
+  </data>
+  <data name="BrokenPiece" xml:space="preserve">
+    <value>Pieza rota</value>
+  </data>
+  <data name="CauseLabel" xml:space="preserve">
+    <value>Causa</value>
+  </data>
+  <data name="CellLabel" xml:space="preserve">
+    <value>Celda</value>
+  </data>
+  <data name="ChatTitle" xml:space="preserve">
+    <value>Conversaciones</value>
+  </data>
+  <data name="Chronology" xml:space="preserve">
+    <value>Cronología</value>
+  </data>
+  <data name="ClosedLabel" xml:space="preserve">
+    <value>Cerrado</value>
+  </data>
+  <data name="DashboardPageTitle" xml:space="preserve">
+    <value>Tablero</value>
+  </data>
+  <data name="DetailPageTitle" xml:space="preserve">
+    <value>Detalle</value>
+  </data>
+  <data name="DetailsLabel" xml:space="preserve">
+    <value>Detalles</value>
+  </data>
+  <data name="DownLabel" xml:space="preserve">
+    <value>DOWN</value>
+  </data>
+  <data name="ElementLabel" xml:space="preserve">
+    <value>Elemento</value>
+  </data>
+  <data name="ElementsLabel" xml:space="preserve">
+    <value>Elementos</value>
+  </data>
+  <data name="FailureMold" xml:space="preserve">
+    <value>Falla en molde</value>
+  </data>
+  <data name="FiveMinutes" xml:space="preserve">
+    <value>Hace 5 minutos</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Olvidé la contraseña</value>
+  </data>
+  <data name="FourteenMinutes" xml:space="preserve">
+    <value>Hace 14 minutos</value>
+  </data>
+  <data name="IdleLabel" xml:space="preserve">
+    <value>IDLE</value>
+  </data>
+  <data name="IncidentsButton" xml:space="preserve">
+    <value>Incidentes</value>
+  </data>
+  <data name="InjuredUser" xml:space="preserve">
+    <value>Se ha reportado un usuario con herida grave en Celda 4.</value>
+  </data>
+  <data name="InLabel" xml:space="preserve">
+    <value>en</value>
+  </data>
+  <data name="InProcessLabel" xml:space="preserve">
+    <value>En Proceso</value>
+  </data>
+  <data name="LackMaterial" xml:space="preserve">
+    <value>Falta de material</value>
+  </data>
+  <data name="LackMold" xml:space="preserve">
+    <value>Falta de molde</value>
+  </data>
+  <data name="LeakLabel" xml:space="preserve">
+    <value>Fuga de agua</value>
+  </data>
+  <data name="MachineStatusTitle" xml:space="preserve">
+    <value>Estatus de máquinas</value>
+  </data>
+  <data name="MainDetail" xml:space="preserve">
+    <value>Se solicitó material con No. 17293 ya que la máquina estaba deteniendo la operación.</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Mantenimiento</value>
+  </data>
+  <data name="MasterMenuChat" xml:space="preserve">
+    <value>Conversaciones</value>
+  </data>
+  <data name="MasterMenuDashboard" xml:space="preserve">
+    <value>Tablero</value>
+  </data>
+  <data name="MasterMenuEnglish" xml:space="preserve">
+    <value>Inglés</value>
+  </data>
+  <data name="MasterMenuEvents" xml:space="preserve">
+    <value>Eventos</value>
+  </data>
+  <data name="MasterMenuLanguage" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="MasterMenuNotifications" xml:space="preserve">
+    <value>Notificaciones</value>
+  </data>
+  <data name="MasterMenuSignOut" xml:space="preserve">
+    <value>Cerrar sesión</value>
+  </data>
+  <data name="MasterMenuSpanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="MasterMenuSupport" xml:space="preserve">
+    <value>Soporte</value>
+  </data>
+  <data name="MasterMenuTitle" xml:space="preserve">
+    <value>Hola </value>
+  </data>
+  <data name="MeasuresNotAllowed" xml:space="preserve">
+    <value>Medidas no permitidas</value>
+  </data>
+  <data name="MilkyPiece" xml:space="preserve">
+    <value>Pieza lechosa</value>
+  </data>
+  <data name="MinorIncident" xml:space="preserve">
+    <value>Incidente menor</value>
+  </data>
+  <data name="MinusSpeed" xml:space="preserve">
+    <value>Ha disminuido la velocidad de la celda 2 debido a falta de material.</value>
+  </data>
+  <data name="MoldRoutine" xml:space="preserve">
+    <value>Rutina de moldes</value>
+  </data>
+  <data name="MonthButton" xml:space="preserve">
+    <value>Mes</value>
+  </data>
+  <data name="NotificationsTitle" xml:space="preserve">
+    <value>Notificaciones</value>
+  </data>
+  <data name="OEECellsTitle" xml:space="preserve">
+    <value>OEE Celdas</value>
+  </data>
+  <data name="OEELabel" xml:space="preserve">
+    <value>OEE</value>
+  </data>
+  <data name="OneHour" xml:space="preserve">
+    <value>Hace 1 hora</value>
+  </data>
+  <data name="OpenLabel" xml:space="preserve">
+    <value>Abierto</value>
+  </data>
+  <data name="PackedLabel" xml:space="preserve">
+    <value>Empacado</value>
+  </data>
+  <data name="PasswordPlaceHolder" xml:space="preserve">
+    <value>Contraseña</value>
+  </data>
+  <data name="PigmentNeeded" xml:space="preserve">
+    <value>Pigmento necesario</value>
+  </data>
+  <data name="PlantLabel" xml:space="preserve">
+    <value>Planta</value>
+  </data>
+  <data name="ProgressLabel" xml:space="preserve">
+    <value>Progreso</value>
+  </data>
+  <data name="QualityLabel" xml:space="preserve">
+    <value>Calidad</value>
+  </data>
+  <data name="RawMaterial" xml:space="preserve">
+    <value>Falta materia prima</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Recordar datos</value>
+  </data>
+  <data name="Request" xml:space="preserve">
+    <value>Solicitó:</value>
+  </data>
+  <data name="Resolved" xml:space="preserve">
+    <value>Resolvió:</value>
+  </data>
+  <data name="SamplingLabel" xml:space="preserve">
+    <value>Muestreo</value>
+  </data>
+  <data name="ScrapCausesTitle" xml:space="preserve">
+    <value>Causas del rechazo</value>
+  </data>
+  <data name="ScrapTitle" xml:space="preserve">
+    <value>Merma</value>
+  </data>
+  <data name="SecurityLabel" xml:space="preserve">
+    <value>Seguridad</value>
+  </data>
+  <data name="SignInButton" xml:space="preserve">
+    <value>Iniciar sesión</value>
+  </data>
+  <data name="SignInTitle" xml:space="preserve">
+    <value>Iniciar sesión</value>
+  </data>
+  <data name="SpeedLabel" xml:space="preserve">
+    <value>Velocidad</value>
+  </data>
+  <data name="StoppagesTitle" xml:space="preserve">
+    <value>Paros más comunes</value>
+  </data>
+  <data name="StoppedProduction" xml:space="preserve">
+    <value>Se ha detenido la producción.</value>
+  </data>
+  <data name="SupportTimeline" xml:space="preserve">
+    <value>Cronología de soporte</value>
+  </data>
+  <data name="SupportTitle" xml:space="preserve">
+    <value>Soporte</value>
+  </data>
+  <data name="TicketClosed" xml:space="preserve">
+    <value>se ha cerrado.</value>
+  </data>
+  <data name="TicketLabel" xml:space="preserve">
+    <value>Ticket</value>
+  </data>
+  <data name="TimeLabel" xml:space="preserve">
+    <value>Disponibilidad</value>
+  </data>
+  <data name="TodayButton" xml:space="preserve">
+    <value>Hoy</value>
+  </data>
+  <data name="UnreadLabel" xml:space="preserve">
+    <value>Sin leer</value>
+  </data>
+  <data name="UpLabel" xml:space="preserve">
+    <value>UP</value>
+  </data>
+  <data name="UsernamePlaceHolder" xml:space="preserve">
+    <value>Usuario</value>
+  </data>
+  <data name="WeekButton" xml:space="preserve">
+    <value>Semana</value>
+  </data>
+  <data name="YesterdayLabel" xml:space="preserve">
+    <value>Ayer</value>
+  </data>
+</root>

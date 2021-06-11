@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:resources="clr-namespace:Flexbaze.Resources"
+    x:Class="Flexbaze.Views.SupportDetail">
+    <!--TitleBar-->
+    <NavigationPage.TitleView>
+        <AbsoluteLayout 
+            VerticalOptions="Center"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            Padding="0">
+            <Label
+               Text="{Binding Title}"
+               TextColor="White"
+               FontSize="14"
+               FontAttributes="Bold"
+               AbsoluteLayout.LayoutBounds="0,0,.85,1"
+               AbsoluteLayout.LayoutFlags="All"
+               HorizontalOptions="CenterAndExpand"/>
+        </AbsoluteLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <ScrollView Orientation="Vertical"
+            Padding="0"
+            Margin="0"
+            VerticalScrollBarVisibility="Never">
+            <StackLayout Orientation="Vertical"
+                Margin="0"
+                Padding="0">
+                <Frame BackgroundColor="{StaticResource dropDark}"
+                    Margin="10,0,10,5"
+                    CornerRadius="5">
+                    <StackLayout Orientation="Vertical"
+                        BackgroundColor="Transparent"
+                        Padding="10,10,10,0">
+                        <Label Text="{Binding MainDetail}"
+                            HorizontalOptions="CenterAndExpand"
+                            FontSize="16"
+                            FontAttributes="Bold"/>
+                        <AbsoluteLayout BackgroundColor="Transparent"
+                            AbsoluteLayout.LayoutBounds="0,0,1,1"
+                            AbsoluteLayout.LayoutFlags="All">
+                            <Image Source="plant.png" 
+                                Margin="0,6,0,10"
+                                AbsoluteLayout.LayoutBounds="0,0,.27,1"
+                                AbsoluteLayout.LayoutFlags="All"
+                                HorizontalOptions="CenterAndExpand"/>
+                            <Label Text="{Binding Plant}" 
+                                Margin="0,8,0,8"
+                                AbsoluteLayout.LayoutBounds=".2,0,.1,1"
+                                AbsoluteLayout.LayoutFlags="All"
+                                HorizontalOptions="Start"
+                                FontSize="12"/>
+                            <Label Text="{Binding Machine}"
+                                FontSize="12"
+                                Margin="0,8,0,8"
+                                AbsoluteLayout.LayoutBounds=".32,0,.2,1"
+                                AbsoluteLayout.LayoutFlags="All"
+                                HorizontalOptions="CenterAndExpand"/>
+                            <Label Text="{Binding Cell}"
+                                FontSize="12"
+                                Margin="0,8,0,8"
+                                AbsoluteLayout.LayoutBounds=".57,0,.2,1"
+                                AbsoluteLayout.LayoutFlags="All"
+                                HorizontalOptions="CenterAndExpand"/>
+                            <Label Text="{Binding Status}"
+                                FontSize="12"
+                                Margin="0,8,0,8"
+                                AbsoluteLayout.LayoutBounds=".78,0,.3,1"
+                                AbsoluteLayout.LayoutFlags="All"
+                                HorizontalOptions="End"/>
+                            <Image Source="{Binding ImgStatus}"
+                                HorizontalOptions="Start"
+                                AbsoluteLayout.LayoutBounds=".95,0,.1,1"
+                                AbsoluteLayout.LayoutFlags="All"/>
+                        </AbsoluteLayout>
+                        <BoxView BackgroundColor="{StaticResource bright}"
+                            HeightRequest="2"/>
+                        <Label Text="{x:Static resources:AppResources.DetailsLabel}"
+                            FontSize="12"
+                            Padding="0,10,0,0"
+                            FontAttributes="Bold"/>
+                        <Label Text="{Binding DetailList[0]}"
+                            FontSize="12"
+                            Padding="25,10,0,10"/>
+                        <Label Text="{x:Static resources:AppResources.Chronology}"
+                            FontSize="12"
+                            Padding="0,0,0,10"
+                            FontAttributes="Bold"/>
+                        <ListView ItemsSource="{Binding StatusList}"
+                            SeparatorVisibility="None"
+                            SelectionMode="None"
+                            RowHeight="28"
+                            VerticalScrollBarVisibility="Never"
+                            MinimumHeightRequest="100">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Image Grid.Column="1"
+                                                Source="{Binding ImgStatus}"
+                                                VerticalOptions="Start"/>
+                                            <Label Grid.Column="2"
+                                                Text="{Binding Status, StringFormat='{0}:'}"
+                                                FontSize="12"
+                                                Padding="5,5,10,10"
+                                                VerticalOptions="Start"/>
+                                            <Label Grid.Column="3"
+                                                Text="{Binding Hour}"
+                                                FontSize="12"
+                                                Padding="5,5,0,10"
+                                                VerticalOptions="Start"/>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Label Text="{x:Static resources:AppResources.Request}"
+                            FontSize="12"
+                            Padding="0,10,0,0"
+                            FontAttributes="Bold"/>
+                        <StackLayout Orientation="Horizontal"
+                            BackgroundColor="Transparent"
+                            HorizontalOptions="FillAndExpand"
+                            Padding="15,5,10,5">
+                            <Frame BackgroundColor="Gray"
+                                CornerRadius="20"
+                                HeightRequest="40"
+                                WidthRequest="40"
+                                IsClippedToBounds="True"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Padding="0"
+                                Margin="10,0,0,0">
+                                <Image Source="{Binding ReportedBy.ImgUser}"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"/>
+                            </Frame>
+                            <StackLayout Orientation="Vertical"
+                                BackgroundColor="Transparent"
+                                Padding="10,10,10,10"
+                                VerticalOptions="CenterAndExpand">
+                                <Label Text="{Binding ReportedBy.Name}"
+                                    FontSize="12"/>
+                                <Label Text="{Binding ReportedBy.JobTitle}"
+                                    FontSize="12"/>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="{x:Static resources:AppResources.Resolved}"
+                            FontSize="12"
+                            FontAttributes="Bold"/>
+                        <StackLayout Orientation="Horizontal"
+                            BackgroundColor="Transparent"
+                            HorizontalOptions="FillAndExpand"
+                            Margin="0"
+                            Padding="15,5,10,-5">
+                            <Frame BackgroundColor="Gray"
+                                CornerRadius="20"
+                                HeightRequest="40"
+                                WidthRequest="40"
+                                IsClippedToBounds="True"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Padding="0"
+                                Margin="10,0,0,0">
+                                <Image Source="{Binding ResolvedBy.ImgUser}"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"/>
+                            </Frame>
+                            <StackLayout Orientation="Vertical"
+                                BackgroundColor="Transparent"
+                                Padding="10,10,10,10"
+                                VerticalOptions="CenterAndExpand">
+                                <Label Text="{Binding ResolvedBy.Name}"
+                                    FontSize="12"/>
+                                <Label Text="{Binding ResolvedBy.JobTitle}"
+                                    FontSize="12"
+                                    Padding="0,0,0,0"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Flexbaze.Views.DetalleAlerta"
+             Title="Detalle Alerta">
+    <ContentPage.Content>
+        <AbsoluteLayout
+            BackgroundColor="{Binding Colors._grisFondo}">
+            <StackLayout 
+                BackgroundColor="White"
+                AbsoluteLayout.LayoutBounds="0,0,1,.22"
+                AbsoluteLayout.LayoutFlags="All"
+                Orientation="Vertical">
+                <BoxView 
+                    HeightRequest="20"
+                    BackgroundColor="{Binding Colors._rojo}"
+                    />
+                <Label
+                    Margin="10,0,0,0"
+                    FontSize="Medium"
+                    Text="{Binding Notification.Header.Mensaje}"
+                    VerticalOptions="StartAndExpand" 
+                    HorizontalOptions="StartAndExpand" />
+                <Label 
+                    Margin="10,0,0,5"
+                    Text="{Binding Notification.Header.TimeLapse}"
+                    HorizontalOptions="StartAndExpand"
+                    />
+            </StackLayout>
+            <StackLayout
+                AbsoluteLayout.LayoutBounds="0,0.68,1,.66"
+                AbsoluteLayout.LayoutFlags="All"
+                Padding="5,5,5,5"
+                BackgroundColor="White"
+                >
+                <ListView     
+                    x:Name="ListViewMessages"
+                    HasUnevenRows="True"
+                    SeparatorVisibility="None"
+                    ItemsSource="{Binding Notification.Messages}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell >
+                                <StackLayout Orientation="Horizontal" 
+                                    Margin="0,5,0,5"
+                                    Padding="0,0,0,0">
+                                    <BoxView
+                                        
+                                        VerticalOptions="Start"
+                                        Margin="5,0,0,0"
+                                        BackgroundColor="Red"
+                                        WidthRequest="30"
+                                        HeightRequest="30"
+                                        CornerRadius="100"
+                                         />
+                                    <StackLayout>
+                                        <Frame
+                                            Margin="5,0,10,0"
+                                            Padding="5,5,10,10"
+                                            HasShadow="True"
+                                            VerticalOptions="FillAndExpand"
+                                        
+                                            CornerRadius="15"
+                                            BackgroundColor="#e4e4e4"
+                                            >
+                                            <StackLayout
+                                                Margin="5,0,0,0">
+                                                <Label 
+                                                    TextColor="#909090"
+                                                    HorizontalOptions="Start"
+                                                    Text="{Binding Title}"
+                                                />
+                                                <Label 
+                                                    Text="{Binding Body}"
+                                                       />
+                                            </StackLayout>
+                                        </Frame>
+                                        <Label 
+                                            
+                                            Text="{Binding TimeLapse}"
+                                            />
+                                    </StackLayout>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+            <AbsoluteLayout
+                BackgroundColor="White"
+                AbsoluteLayout.LayoutBounds="0,1,1,.1"
+                AbsoluteLayout.LayoutFlags="All">
+                <Frame
+                    AbsoluteLayout.LayoutBounds="0.5,0.5,.9,.9"
+                    AbsoluteLayout.LayoutFlags="All"
+                    BackgroundColor="White"
+                    CornerRadius="15"
+                    Padding="0"
+                    >
+                    <AbsoluteLayout>
+                        <Entry 
+                            AbsoluteLayout.LayoutBounds=".2,0,.65,.9"
+                            AbsoluteLayout.LayoutFlags="All"
+                            FontSize="Default" 
+                            FontAttributes="None"
+                            x:Name="NewMessage"
+                            Placeholder="Escribe un comentario..."
+                            />
+                        <Button 
+                            AbsoluteLayout.LayoutBounds=".95,0,.25,.9"
+                            AbsoluteLayout.LayoutFlags="All"
+                            HorizontalOptions="End"
+                            Image="enviar.png"
+                            BackgroundColor="Transparent"
+                            Command="{Binding SendMessage}"/>
+                    </AbsoluteLayout>
+                </Frame>
+            </AbsoluteLayout>
+            <Frame
+                IsVisible="True"
+                AbsoluteLayout.LayoutBounds="0,0,1,.22"
+                AbsoluteLayout.LayoutFlags="All"
+                Padding="0"
+                BackgroundColor="Transparent"
+                >
+                <ListView 
+                    RefreshCommand="{Binding Refresh}"
+                    x:Name="PullToRefresh"
+                    SeparatorColor="Transparent"
+                    BackgroundColor="Transparent"
+                    IsPullToRefreshEnabled="True"
+                />
+            </Frame>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

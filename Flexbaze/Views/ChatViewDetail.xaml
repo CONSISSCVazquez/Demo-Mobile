@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:Conv="clr-namespace:Flexbaze.Converters"
+             mc:Ignorable="d"
+             x:Class="Flexbaze.Views.ChatViewDetail">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Conv:BoolToColorConverter x:Key="ColorConverter"/>
+            <Conv:InverterConverter x:Key="InverterConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal"
+            VerticalOptions="Center"
+            Spacing="10">
+            <Frame HasShadow="False"
+                IsClippedToBounds="True"
+                Margin="3,3,3,3"
+                Padding="0"
+                CornerRadius="15">
+                <Image Source="{Binding PictureChat}"
+                    HeightRequest="30"
+                    WidthRequest="30"/>
+            </Frame>
+            <Label
+               Text="{Binding Title}"
+               TextColor="White"
+               FontSize="14"
+               FontAttributes="Bold"
+               VerticalTextAlignment="Center" />
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical"
+            Padding="0">
+            <CollectionView ItemsSource="{Binding Chats}">
+                <!--<CollectionView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding Date}"
+                            FontSize="Large"
+                            HorizontalTextAlignment="Center"/>
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>-->
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackLayout Orientation="Vertical"
+                                Padding="0"
+                                Margin="0"
+                                IsVisible="{Binding IsMyMessage, 
+                                Converter={StaticResource InverterConverter}}"
+                                Grid.Column="0">
+                                <Frame BackgroundColor="{Binding IsMyMessage, 
+                                Converter={StaticResource ColorConverter}}"
+                                HasShadow="False"
+                                Margin="10,5,5,5"
+                                Padding="10,10,10,10"
+                                CornerRadius="2">
+                                    <Label Text="{Binding Message}"
+                                       FontSize="Small"
+                                       LineBreakMode="WordWrap"/>
+                                </Frame>
+                                <Label Text="{Binding Hour}"
+                                   FontSize="Micro"
+                                   Padding="10,0,0,0"
+                                   Margin="0,0,0,0"
+                                   HorizontalTextAlignment="Start"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical"
+                                Padding="0"
+                                Margin="0"
+                                IsVisible="{Binding IsMyMessage}"
+                                Grid.Column="1">
+                                <Frame BackgroundColor="{Binding IsMyMessage, 
+                                    Converter={StaticResource ColorConverter}}"
+                                    HasShadow="False"
+                                    Margin="5,5,10,5"
+                                    Padding="10,10,10,10"
+                                    CornerRadius="2">
+                                    <Label Text="{Binding Message}"
+                                       FontSize="Small"
+                                       LineBreakMode="WordWrap"/>
+                                </Frame>
+                                <Label Text="{Binding Hour}"
+                                   FontSize="Micro"
+                                   Padding="0,0,10,0"
+                                   Margin="0,0,0,0"
+                                   HorizontalTextAlignment="End"/>
+                            </StackLayout>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Frame BackgroundColor="#202850"
+                HorizontalOptions="Fill"
+                Margin="10,10,10,10"
+                HasShadow="False"
+                Padding="0">
+                <Entry FontSize="Small"
+                    Placeholder="Escribir"
+                    PlaceholderColor="White"
+                    BackgroundColor="Transparent"/>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

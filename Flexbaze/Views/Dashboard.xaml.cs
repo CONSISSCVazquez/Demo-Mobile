@@ -6,11 +6,12 @@ using SkiaSharp;
 using Flexbaze.ViewModels;
 using Flexbaze.Models;
 using System.Collections.ObjectModel;
+using static Flexbaze.ViewModels.DashboardViewModel;
 
 namespace Flexbaze.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Dashboard : ContentPage
+    public partial class Dashboard : ContentPage, INavigationHandler
     {
         public ActivityIndicatorModel ActivityIndicator = new ActivityIndicatorModel();
         private DashboardViewModel dashboardViewModel;
@@ -23,35 +24,17 @@ namespace Flexbaze.Views
             Ini();
             Colorbright = (Color)App.Current.Resources["bright"];
             Colormain = (Color)App.Current.Resources["main"];
-
-            barChart.Chart = new BarChart()
-            {
-                Entries = dashboardViewModel.EntryList,
-                BackgroundColor = SKColor.Parse("#00FFFFFF"),
-                LabelTextSize = 20,
-                ValueLabelOrientation = Orientation.Horizontal,
-                BarAreaAlpha = 0
-            };
-
-            scrapChart.Chart = new BarChart()
-            {
-                Entries = dashboardViewModel.EntryCausesList,
-                BackgroundColor = SKColor.Parse("#00FFFFFF"),
-                LabelTextSize = 20,
-                ValueLabelOrientation = Orientation.Horizontal,
-                BarAreaAlpha = 0
-            };
+            ReloadCharts();
         }
-        
+
         private void Ini()
         {
-            dashboardViewModel = new DashboardViewModel();
+            dashboardViewModel = new DashboardViewModel(this);
             BindingContext = dashboardViewModel;
         }
 
         private void BtnIncidents_Clicked(object sender, EventArgs e)
         {
-            
         }
 
         private void BtnToday_Clicked(object sender, EventArgs e)
@@ -59,7 +42,9 @@ namespace Flexbaze.Views
             Btn_Today.BackgroundColor = Colorbright;
             Btn_Week.BackgroundColor = Colormain;
             Btn_Month.BackgroundColor = Colormain;
-            dashboardViewModel.GetData(ddlPlant.SelectedItem.ToString(), "Today");
+            dashboardViewModel.LoadScrap(Planning.Today);
+            dashboardViewModel.LoadEntries(Planning.Today);
+            ReloadCharts();
         }
 
         private void BtnWeek_Clicked(object sender, EventArgs e)
@@ -67,7 +52,9 @@ namespace Flexbaze.Views
             Btn_Today.BackgroundColor = Colormain;
             Btn_Week.BackgroundColor = Colorbright;
             Btn_Month.BackgroundColor = Colormain;
-            dashboardViewModel.GetData(ddlPlant.SelectedItem.ToString(), "Week");
+            dashboardViewModel.LoadScrap(Planning.Week);
+            dashboardViewModel.LoadEntries(Planning.Week);
+            ReloadCharts();
         }
 
         private void BtnMonth_Clicked(object sender, EventArgs e)
@@ -75,7 +62,9 @@ namespace Flexbaze.Views
             Btn_Today.BackgroundColor = Colormain;
             Btn_Week.BackgroundColor = Colormain;
             Btn_Month.BackgroundColor = Colorbright;
-            dashboardViewModel.GetData(ddlPlant.SelectedItem.ToString(), "Month");
+            dashboardViewModel.LoadScrap(Planning.Month);
+            dashboardViewModel.LoadEntries(Planning.Month);
+            ReloadCharts();
         }
 
         private void BtnOEE_Clicked(object sender, EventArgs e)
@@ -83,19 +72,25 @@ namespace Flexbaze.Views
 
         }
 
-        private void BtnPlant_Clicked(object sender, EventArgs e)
+        private void ReloadCharts()
         {
-            string btnSelected = "Today";
-            if (Btn_Week.BackgroundColor == Colorbright)
+            barChart.Chart = new BarChart()
             {
-                btnSelected = "Week";
-            }
-            else
+                Entries = dashboardViewModel.EntryList,
+                BackgroundColor = SKColor.Parse("#00FFFFFF"),
+                LabelTextSize = 30,
+                ValueLabelOrientation = Orientation.Horizontal,
+                BarAreaAlpha = 0
+            };
+
+            scrapChart.Chart = new BarChart()
             {
-                if (Btn_Month.BackgroundColor == Colorbright)
-                    btnSelected = "Month";
-            }
-            dashboardViewModel.GetData(ddlPlant.SelectedItem.ToString(), btnSelected);
+                Entries = dashboardViewModel.EntryList,
+                BackgroundColor = SKColor.Parse("#00FFFFFF"),
+                LabelTextSize = 30,
+                ValueLabelOrientation = Orientation.Horizontal,
+                BarAreaAlpha = 0
+            };
         }
 
         private void BtnSupport_Clicked(object sender, EventArgs e)
@@ -112,7 +107,6 @@ namespace Flexbaze.Views
 
         private void BtnAccidents_Clicked(object sender, EventArgs e)
         {
-
         }
 
         private void btnOEEUpToDown_Clicked(object sender, EventArgs e)
@@ -120,7 +114,6 @@ namespace Flexbaze.Views
             OEEExpand.IsVisible = true;
             OEENormal.IsVisible = false;
         }
-
 
         private void btnOEEUpToDownExpand_Clicked(object sender, EventArgs e)
         {
@@ -138,15 +131,6 @@ namespace Flexbaze.Views
             HdrInProcessLvw.IsVisible = false;
             HdrClosedLvw.IsVisible = false;
             slSupportExpand.IsVisible = false;
-        }
-
-        private void OnPlantSelected(object sender, EventArgs e)
-        {
-            Picker pick = (Picker)sender;
-            if (pick.SelectedIndex == 0)
-            {
-                ddlPlant.ItemsSource = pick.ItemsSource;
-            }
         }
 
         private void BtnScrap_Clicked(object sender, EventArgs e)
@@ -167,15 +151,15 @@ namespace Flexbaze.Views
 
         private void OpenItemTapped_Click(object sender, ItemTappedEventArgs e)
         {
-            DashboardViewModel vm = (DashboardViewModel)this.BindingContext;
-            Ticket t = (Ticket)e.Item;
-            ObservableCollection<Ticket> tL = new ObservableCollection<Ticket>();
-            foreach (Ticket tck in vm.OpenTicketList)
+            DashboardViewModel vm = (DashboardViewModel)BindingContext;
+            TicketComplete t = (TicketComplete)e.Item;
+            ObservableCollection<TicketComplete> tL = new ObservableCollection<TicketComplete>();
+            foreach (TicketComplete tck in vm.OpenTicketList)
             {
                 tL.Add(tck);
             }
 
-            foreach (Ticket tck in tL)
+            foreach (TicketComplete tck in tL)
             {
                 if (tck.Id == t.Id)
                 {
@@ -193,7 +177,7 @@ namespace Flexbaze.Views
             }
 
             vm.OpenTicketList.Clear();
-            foreach (Ticket tic in tL)
+            foreach (TicketComplete tic in tL)
             {
                 vm.OpenTicketList.Add(tic);
             }
@@ -201,15 +185,15 @@ namespace Flexbaze.Views
 
         private void InProcessItemTapped_Click(object sender, ItemTappedEventArgs e)
         {
-            DashboardViewModel vm = (DashboardViewModel)this.BindingContext;
-            Ticket t = (Ticket)e.Item;
-            ObservableCollection<Ticket> tL = new ObservableCollection<Ticket>();
-            foreach (Ticket tck in vm.InProcessTicketList)
+            DashboardViewModel vm = (DashboardViewModel)BindingContext;
+            TicketComplete t = (TicketComplete)e.Item;
+            ObservableCollection<TicketComplete> tL = new ObservableCollection<TicketComplete>();
+            foreach (TicketComplete tck in vm.InProcessTicketList)
             {
                 tL.Add(tck);
             }
 
-            foreach (Ticket tck in tL)
+            foreach (TicketComplete tck in tL)
             {
                 if (tck.Id == t.Id)
                 {
@@ -227,7 +211,7 @@ namespace Flexbaze.Views
             }
 
             vm.InProcessTicketList.Clear();
-            foreach (Ticket tic in tL)
+            foreach (TicketComplete tic in tL)
             {
                 vm.InProcessTicketList.Add(tic);
             }
@@ -235,15 +219,15 @@ namespace Flexbaze.Views
 
         private void ClosedItemTapped_Click(object sender, ItemTappedEventArgs e)
         {
-            DashboardViewModel vm = (DashboardViewModel)this.BindingContext;
-            Ticket t = (Ticket)e.Item;
-            ObservableCollection<Ticket> tL = new ObservableCollection<Ticket>();
-            foreach (Ticket tck in vm.ClosedTicketList)
+            DashboardViewModel vm = (DashboardViewModel)BindingContext;
+            TicketComplete t = (TicketComplete)e.Item;
+            ObservableCollection<TicketComplete> tL = new ObservableCollection<TicketComplete>();
+            foreach (TicketComplete tck in vm.ClosedTicketList)
             {
                 tL.Add(tck);
             }
 
-            foreach (Ticket tck in tL)
+            foreach (TicketComplete tck in tL)
             {
                 if (tck.Id == t.Id)
                 {
@@ -261,10 +245,48 @@ namespace Flexbaze.Views
             }
 
             vm.ClosedTicketList.Clear();
-            foreach (Ticket tic in tL)
+            foreach (TicketComplete tic in tL)
             {
                 vm.ClosedTicketList.Add(tic);
             }
+        }
+
+        public void AssignTicketAsync(string ticketId, string status)
+        {
+            Navigation.PushAsync(new SupportDetailAssign(ticketId, status));
+        }
+
+        public void ViewDetailsTicketAsync(TicketComplete ticket, string factory)
+        {
+            Navigation.PushAsync(new SupportDetail(ticket, factory));
+        }
+
+        private void MnuDashboard_Clicked(object sender, EventArgs e)
+        {
+        }
+
+        private void MnuSupport_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PopToRootAsync();
+            App.Current.MainPage = new NavigationPage(new Chronology()) { BarBackgroundColor = Color.FromHex("#101630") };
+        }
+
+        private void MnuOEE_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PopToRootAsync();
+            App.Current.MainPage = new NavigationPage(new OEEMachines()) { BarBackgroundColor = Color.FromHex("#101630") };
+        }
+
+        private void MnuNotification_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PopToRootAsync();
+            App.Current.MainPage = new NavigationPage(new Notifications()) { BarBackgroundColor = Color.FromHex("#101630") };
+        }
+
+        private void MnuProfile_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PopToRootAsync();
+            App.Current.MainPage = new NavigationPage(new Profile()) { BarBackgroundColor = Color.FromHex("#101630") };
         }
     }
 }

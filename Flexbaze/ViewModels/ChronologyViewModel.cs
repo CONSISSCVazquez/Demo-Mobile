@@ -8,16 +8,17 @@ using Xamarin.Forms;
 using Flexbaze.Resources;
 using Flexbaze.Views;
 using System.Windows.Input;
+using Flexbaze.ViewModels.Base;
 
 namespace Flexbaze.ViewModels
 {
-    class ChronologyViewModel : INotifyPropertyChanged
+    class ChronologyViewModel : BaseViewModel, INotifyPropertyChanged
     {
         private Request _request = new Request();
-        private ObservableCollection<Ticket> _openTicketList;
-        private ObservableCollection<Ticket> _inProcessTicketList;
-        private ObservableCollection<Ticket> _closedTicketList;
-        private ObservableCollection<Ticket> _filterTicketList;
+        private ObservableCollection<TicketComplete> _openTicketList;
+        private ObservableCollection<TicketComplete> _inProcessTicketList;
+        private ObservableCollection<TicketComplete> _closedTicketList;
+        private ObservableCollection<TicketComplete> _filterTicketList;
         private Color _btnOpenColor;
         private Color _btnInProcessColor;
         private Color _btnDoneColor;
@@ -33,18 +34,18 @@ namespace Flexbaze.ViewModels
         private int _qtyOpen;
         private int _qtyInProcess;
         private int _qtyClosed;
-        private Ticket _openSelectedItem;
-        private List<string> _plantList;
-        private List<string> _cellList;
-        private string _plantSelected;
-        private string _cellSelected;
+        private TicketComplete _openSelectedItem;
+        private List<FactoryType> _plantList;
+        private List<FactoryType> _familyMachineList;
+        private FactoryType _plantSelected;
+        private FactoryType _familyMachineSelected;
         public Command CmdTickets { get; set; }
         public Command CmdSelected { get; set; }
         public ICommand CmdAssign { get; set; }
         public ICommand CmdViewDetails { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public ObservableCollection<Ticket> OpenTicketList
+        public INavigationHandler NavigationHandler { private get; set; }
+        public ObservableCollection<TicketComplete> OpenTicketList
         {
             get => _openTicketList;
             private set
@@ -54,7 +55,7 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public ObservableCollection<Ticket> InProcessTicketList
+        public ObservableCollection<TicketComplete> InProcessTicketList
         {
             get => _inProcessTicketList;
             private set
@@ -64,7 +65,7 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public ObservableCollection<Ticket> ClosedTicketList
+        public ObservableCollection<TicketComplete> ClosedTicketList
         {
             get => _closedTicketList;
             private set
@@ -74,7 +75,7 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public Ticket OpenSelectedItem
+        public TicketComplete OpenSelectedItem
         {
             get => _openSelectedItem;
             private set
@@ -94,7 +95,7 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public List<string> PlantList
+        public List<FactoryType> PlantList
         {
             get => _plantList;
             private set
@@ -104,17 +105,17 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public List<string> CellList
+        public List<FactoryType> FamilyMachineList
         {
-            get => _cellList;
+            get => _familyMachineList;
             private set
             {
-                _cellList = value;
+                _familyMachineList = value;
                 OnPropertyChanged();
             }
         }
 
-        public string PlantSelected
+        public FactoryType PlantSelected
         {
             get => _plantSelected;
             private set
@@ -124,17 +125,17 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public string CellSelected
+        public FactoryType FamilyMachineSelected
         {
-            get => _cellSelected;
+            get => _familyMachineSelected;
             private set
             {
-                _cellSelected = value;
+                _familyMachineSelected = value;
                 OnPropertyChanged();
             }
         }
 
-        public ObservableCollection<Ticket> FilterTicketList
+        public ObservableCollection<TicketComplete> FilterTicketList
         {
             get => _filterTicketList;
             private set
@@ -284,8 +285,9 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public ChronologyViewModel()
+        public ChronologyViewModel(INavigationHandler _NavigationHandler) : base()
         {
+            NavigationHandler = _NavigationHandler;
             Ini();
         }
 
@@ -302,119 +304,437 @@ namespace Flexbaze.ViewModels
         private void LoadTickets()
         {
             WidthScreen = App.ScreenWidth;
-            PlantList = new List<string>();
-            CellList = new List<string>();
+            PlantList = new List<FactoryType>();
+            FamilyMachineList = new List<FactoryType>();
             CmdSelected = new Command((param) =>
-                    SelectedTicket((Ticket)param));
-            CmdAssign = new Command((param) =>
-                    AssignTicket(param.ToString()));
-            CmdViewDetails = new Command((param) =>
-                    ViewDetails(param.ToString()));
-            OpenTicketList = new ObservableCollection<Ticket>();
-            InProcessTicketList = new ObservableCollection<Ticket>();
-            ClosedTicketList = new ObservableCollection<Ticket>();
-            FilterTicketList = new ObservableCollection<Ticket>();
-            Ticket ticket1 = new Ticket()
+                    SelectedTicket((TicketComplete)param));
+            OpenTicketList = new ObservableCollection<TicketComplete>();
+            InProcessTicketList = new ObservableCollection<TicketComplete>();
+            ClosedTicketList = new ObservableCollection<TicketComplete>();
+            FilterTicketList = new ObservableCollection<TicketComplete>();
+            TicketComplete ticket1 = new TicketComplete()
             {
                 Id = "1",
-                Status = "Abierto",
-                ImgStatus = "open.png",
+                Cell = new CellType()
+                {
+                    Id = "1",
+                    Name = "C1"
+                },
+                Machine = new MachineType()
+                {
+                    Id = "1",
+                    Name = "TRO-011"
+                },
+                StartedAt = new DateTime(2020, 05, 22, 10, 12, 19),
+                EndedAtCommitment = new DateTime(),
+                EndedAt = new DateTime(),
+                Status = AppResources.OpenLabel,
+                ReportedBy = new UserType()
+                {
+                    Id = "4",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Juan",
+                    LastName = "Perez",
+                    Profile = new ProfileType()
+                    {
+                        Id = "3",
+                        Name = "Juan Perez",
+                        Picture = ""
+                    },
+                },
                 Description = AppResources.LackMaterial,
+                ImgStatus = "open.png",
                 Hour = "10:12 AM",
-                Machine = "M101",
-                OEE = "96%",
-                Cell = "C1",
                 TextButton = AppResources.AssignLabel,
                 Progress = new Rectangle(19, 30, 2, 40),
                 IsSelected = false,
                 ButtonBorder = "#336EF4",
                 CmdName = "CmdAssign",
-                CmdButton = (Command)CmdAssign
+                CmdAssign = new Command((param) =>
+                            AssignTicket((TicketComplete)param))
             };
-            Ticket ticket2 = new Ticket()
+            TicketComplete ticket2 = new TicketComplete()
             {
                 Id = "2",
-                Status = "Abierto",
+                Status = AppResources.OpenLabel,
                 ImgStatus = "open.png",
-                Description = AppResources.FailureMold + " 392",
-                Hour = "10:12 AM",
-                Machine = "M301",
-                OEE = "96%",
-                Cell = "C1",
+                Description = AppResources.LackMaterial,
+                Hour = "10:16 PM",
+                Machine = new MachineType()
+                {
+                    Id = "2",
+                    Name = "CORT-007"
+                },
+                Cell = new CellType()
+                {
+                    Id = "1",
+                    Name = "C1"
+                },
+                StartedAt = new DateTime(2020, 05, 22, 22, 16, 19),
+                EndedAtCommitment = new DateTime(),
+                EndedAt = new DateTime(),
+                ReportedBy = new UserType()
+                {
+                    Id = "4",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Juan",
+                    LastName = "Perez",
+                    Profile = new ProfileType()
+                    {
+                        Id = "3",
+                        Name = "Juan Perez",
+                        Picture = ""
+                    },
+                },
                 TextButton = AppResources.AssignLabel,
                 Progress = new Rectangle(19, 0, 2, 35),
                 IsSelected = false,
                 ButtonBorder = "#336EF4",
                 CmdName = "CmdAssign",
-                CmdButton = (Command)CmdAssign
+                CmdAssign = new Command((param) =>
+                            AssignTicket((TicketComplete)param))
             };
-            Ticket ticket3 = new Ticket()
+            TicketComplete ticket3 = new TicketComplete()
             {
                 Id = "3",
-                Status = "En Proceso",
+                Status = AppResources.InProcessLabel,
                 ImgStatus = "clock.png",
-                Description = AppResources.Maintenance,
-                Hour = "10:12 AM",
-                Machine = "M101",
-                OEE = "96%",
-                Cell = "C1",
+                Description = AppResources.LackMaterial,
+                Hour = "07:25 AM",
+                Machine = new MachineType()
+                {
+                    Id = "1",
+                    Name = "ROLA-003"
+                },
+                Cell = new CellType()
+                {
+                    Id = "1",
+                    Name = "C1"
+                },
+                StartedAt = new DateTime(2020, 05, 22, 07, 25, 19),
+                EndedAtCommitment = new DateTime(),
+                EndedAt = new DateTime(),
+                ReportedBy = new UserType()
+                {
+                    Id = "4",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Juan",
+                    LastName = "Perez",
+                    Profile = new ProfileType()
+                    {
+                        Id = "3",
+                        Name = "Juan Perez",
+                        Picture = ""
+                    },
+                },
+                AssignedTo = new UserType()
+                {
+                    Id = "2",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Ricardo",
+                    LastName = "García",
+                    Profile = new ProfileType()
+                    {
+                        Id = "2",
+                        Name = "Ricardo García",
+                        Picture = "https://flexbaze-demo.s3.amazonaws.com/pp.jpeg"
+                    },
+                },
                 TextButton = AppResources.DetailsLabel,
                 Progress = new Rectangle(19, 30, 2, 40),
                 IsSelected = false,
                 ButtonBorder = "#F88300",
                 CmdName = "CmdViewDetails",
-                CmdButton = (Command)CmdViewDetails
+                CmdViewDetails = new Command((param) =>
+                            ViewDetails((TicketComplete)param))
             };
-            Ticket ticket4 = new Ticket()
+            TicketComplete ticket4 = new TicketComplete()
             {
                 Id = "4",
-                Status = "En Proceso",
+                Status = AppResources.InProcessLabel,
                 ImgStatus = "clock.png",
-                Description = AppResources.LeakLabel,
-                Hour = "10:12 AM",
-                Machine = "M301",
-                OEE = "96%",
-                Cell = "C1",
+                Description = AppResources.LackMaterial,
+                Hour = "03:33 PM",
+                StartedAt = new DateTime(2020, 05, 22, 15, 33, 19),
+                EndedAtCommitment = new DateTime(),
+                EndedAt = new DateTime(),
+                Machine = new MachineType()
+                {
+                    Id = "2",
+                    Name = "PREN-015"
+                },
+                Cell = new CellType()
+                {
+                    Id = "1",
+                    Name = "C1"
+                },
+                ReportedBy = new UserType()
+                {
+                    Id = "4",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Roberto",
+                    LastName = "Lee",
+                    Profile = new ProfileType()
+                    {
+                        Id = "3",
+                        Name = "Roberto Lee",
+                        Picture = ""
+                    },
+                },
+                AssignedTo = new UserType()
+                {
+                    Id = "2",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Luis",
+                    LastName = "García",
+                    Profile = new ProfileType()
+                    {
+                        Id = "2",
+                        Name = "Luis García",
+                        Picture = "https://flexbaze-demo.s3.amazonaws.com/pp.jpeg"
+                    },
+                },
                 TextButton = AppResources.DetailsLabel,
                 Progress = new Rectangle(19, 0, 2, 70),
                 IsSelected = false,
                 ButtonBorder = "#F88300",
                 CmdName = "CmdViewDetails",
-                CmdButton = (Command)CmdViewDetails
+                CmdViewDetails = new Command((param) =>
+                            ViewDetails((TicketComplete)param))
             };
-            Ticket ticket5 = new Ticket()
+            TicketComplete ticket5 = new TicketComplete()
             {
                 Id = "5",
-                Status = "En Proceso",
+                Status = AppResources.InProcessLabel,
                 ImgStatus = "clock.png",
-                Description = AppResources.MinorIncident,
-                Hour = "10:12 AM",
-                Machine = "M101",
-                OEE = "96%",
-                Cell = "C1",
+                Description = AppResources.LackMaterial,
+                Hour = "11:45 PM",
+                StartedAt = new DateTime(2020, 05, 22, 23, 45, 19),
+                EndedAtCommitment = new DateTime(),
+                EndedAt = new DateTime(),
+                Machine = new MachineType()
+                {
+                    Id = "1",
+                    Name = "CIZ-021"
+                },
+                Cell = new CellType()
+                {
+                    Id = "1",
+                    Name = "C1"
+                },
+                ReportedBy = new UserType()
+                {
+                    Id = "4",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Dante",
+                    LastName = "Juárez",
+                    Profile = new ProfileType()
+                    {
+                        Id = "3",
+                        Name = "Dante Juárez",
+                        Picture = ""
+                    },
+                },
+                AssignedTo = new UserType()
+                {
+                    Id = "2",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Luis",
+                    LastName = "García",
+                    Profile = new ProfileType()
+                    {
+                        Id = "2",
+                        Name = "Luis García",
+                        Picture = "https://flexbaze-demo.s3.amazonaws.com/pp.jpeg"
+                    },
+                },
                 TextButton = AppResources.DetailsLabel,
                 Progress = new Rectangle(19, 0, 2, 35),
                 IsSelected = false,
                 ButtonBorder = "#F88300",
                 CmdName = "CmdViewDetails",
-                CmdButton = (Command)CmdViewDetails
+                CmdViewDetails = new Command((param) =>
+                            ViewDetails((TicketComplete)param))
             };
-            Ticket ticket6 = new Ticket()
+            TicketComplete ticket6 = new TicketComplete()
             {
                 Id = "6",
-                Status = "Cerrado",
+                Status = AppResources.ClosedLabel,
                 ImgStatus = "done.png",
                 Description = AppResources.LackMaterial,
-                Hour = "10:12 AM",
-                Machine = "M101",
-                OEE = "96%",
-                Cell = "C1",
+                Hour = "11:11 AM",
+                Machine = new MachineType()
+                {
+                    Id = "1",
+                    Name = "PUNZ-008"
+                },
+                Cell = new CellType()
+                {
+                    Id = "1",
+                    Name = "C1"
+                },
+                StartedAt = new DateTime(2020, 05, 22, 11, 11, 19),
+                EndedAtCommitment = new DateTime(),
+                EndedAt = new DateTime(),
+                ReportedBy = new UserType()
+                {
+                    Id = "4",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Dante",
+                    LastName = "Juárez",
+                    Profile = new ProfileType()
+                    {
+                        Id = "3",
+                        Name = "Dante Juárez",
+                        Picture = ""
+                    },
+                },
+                AssignedTo = new UserType()
+                {
+                    Id = "2",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "José",
+                    LastName = "Loera",
+                    Profile = new ProfileType()
+                    {
+                        Id = "2",
+                        Name = "Jose Loera",
+                        Picture = "https://flexbaze-demo.s3.amazonaws.com/pp.jpeg"
+                    },
+                },
+                Events = new List<TicketEventType>()
+                {
+                    new TicketEventType()
+                    {
+                        Id = "14",
+                        Description = "Hola",
+                        Timestamp = new DateTime(2021,05,24,16,45,03),
+                        EventType = "Detail",
+                        User = new UserType()
+                        {
+                            Profile = new ProfileType()
+                            {
+                                Picture = "",
+                                Name = ""
+                            }
+                        }
+                    },
+                    new TicketEventType()
+                    {
+                        Id = "15",
+                        Description = "H",
+                        Timestamp = new DateTime(2021,05,26,19,55,43),
+                        EventType = "Detail",
+                        User = new UserType()
+                        {
+                            Profile = new ProfileType()
+                            {
+                                Picture = "",
+                                Name = ""
+                            }
+                        }
+                    },
+                    new TicketEventType()
+                    {
+                        Id = "16",
+                        Description = "Hola",
+                        Timestamp = new DateTime(2021,06,09,16,46,02),
+                        EventType = "Detail",
+                        User = new UserType()
+                        {
+                            Profile = new ProfileType()
+                            {
+                                Picture = "",
+                                Name = ""
+                            }
+                        }
+                    },
+                    new TicketEventType()
+                    {
+                        Id = "17",
+                        Description = "Ticket cerrado",
+                        Timestamp = new DateTime(2021,06,09,16,46,18),
+                        EventType = null,
+                        User = null
+                    }
+                },
                 TextButton = AppResources.DetailsLabel,
                 Progress = new Rectangle(19, 30, 0, 0),
                 IsSelected = false,
                 ButtonBorder = "#36A889",
                 CmdName = "CmdViewDetails",
-                CmdButton = (Command)CmdViewDetails
+                CmdViewDetails = new Command((param) =>
+                            ViewDetails((TicketComplete)param))
             };
 
             OpenTicketList.Add(ticket1);
@@ -439,22 +759,25 @@ namespace Flexbaze.ViewModels
             BtnOpenIsSelected = true;
             BtnInProcessIsSelected = false;
             BtnDoneIsSelected = false;
-            PlantList.Add("General");
-            PlantList.Add("M1");
-            PlantList.Add("M2");
-            PlantList.Add("M3");
-            PlantSelected = "General";
-            CellList.Add(AppResources.AllCells);
-            CellList.Add(AppResources.CellLabel + " 1");
-            CellList.Add(AppResources.CellLabel + " 2");
-            CellList.Add(AppResources.CellLabel + " 3");
-            CellList.Add(AppResources.CellLabel + " 4");
-            CellList.Add(AppResources.CellLabel + " 5");
-            CellSelected = AppResources.AllCells;
+            PlantList.Add(new FactoryType() { Id = "1", Name = "M1" });
+            PlantList.Add(new FactoryType() { Id = "2", Name = "M2" });
+            PlantList.Add(new FactoryType() { Id = "3", Name = "M3" });
+            PlantSelected = PlantList[0];
+            FamilyMachineList = new List<FactoryType>();
+            FamilyMachineList.Add(new FactoryType() { Id = "1", Name = "General" });
+            FamilyMachineList.Add(new FactoryType() { Id = "2", Name = "Roladora de Lámina" });
+            FamilyMachineList.Add(new FactoryType() { Id = "3", Name = "Cortadora de Rollo" });
+            FamilyMachineList.Add(new FactoryType() { Id = "4", Name = "Troqueladoras" });
+            FamilyMachineList.Add(new FactoryType() { Id = "5", Name = "Prensas Cortina" });
+            FamilyMachineList.Add(new FactoryType() { Id = "6", Name = "Presas Cortina CNC" });
+            FamilyMachineList.Add(new FactoryType() { Id = "7", Name = "Punzonadoras" });
+            FamilyMachineList.Add(new FactoryType() { Id = "8", Name = "Cizallas" });
+            FamilyMachineList.Add(new FactoryType() { Id = "9", Name = "Tren Laminado" });
+            FamilyMachineSelected = FamilyMachineList[0];
             Period = "Hoy";
         }
 
-        public void SelectedTicket(Ticket t)
+        public void SelectedTicket(TicketComplete t)
         {
             if (t != null)
             {
@@ -473,42 +796,22 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public async void ViewDetails(string ticketId)
+        public void ViewDetails(TicketComplete ticket)
         {
-            string status = GetStatus(ticketId);
-            await App.MasterDP.Detail.Navigation.PushAsync(new SupportDetail(ticketId, status));
+            if (ticket != null)
+            {
+                NavigationHandler.ViewDetailsTicketAsync(ticket, PlantSelected.Id);
+            }
         }
 
-        public string GetStatus(string ticketId)
+        public void AssignTicket(TicketComplete ticket)
         {
-            string status = string.Empty;
-            if (BtnInProcessIsSelected)
+            if (ticket != null)
             {
-                foreach (Ticket t in InProcessTicketList)
-                {
-                    if (t.Id == ticketId)
-                    {
-                        return AppResources.InProcessLabel;
-                    }
-                }
+                NavigationHandler.AssignTicketAsync(ticket.Id, ticket.Status);
             }
-            if (BtnDoneIsSelected)
-            {
-                foreach (Ticket t in ClosedTicketList)
-                {
-                    if (t.Id == ticketId)
-                    {
-                        return AppResources.ClosedLabel;
-                    }
-                }
-            }
-            return status;
         }
 
-        public void AssignTicket(string ticketId)
-        {
-            Console.WriteLine(ticketId);
-        }
         public void FilterTickets(string filter)
         {
             switch(filter)
@@ -560,6 +863,12 @@ namespace Flexbaze.ViewModels
                     }        
                     break;
             }
+        }
+
+        public interface INavigationHandler
+        {
+            void AssignTicketAsync(string ticketId, string status);
+            void ViewDetailsTicketAsync(TicketComplete ticket, string factory);
         }
     }
 }

@@ -117,8 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
   <data name="AccidentsButton" xml:space="preserve">
     <value>Accidents</value>
+  </data>
+  <data name="AddDetail" xml:space="preserve">
+    <value>Add detail</value>
+  </data>
+  <data name="AddDetailMessage" xml:space="preserve">
+    <value>Are you sure you want to add this detail?</value>
+  </data>
+  <data name="AddDetails" xml:space="preserve">
+    <value>Add details</value>
   </data>
   <data name="AllCells" xml:space="preserve">
     <value>All cells</value>
@@ -138,11 +150,17 @@
   <data name="BrokenPiece" xml:space="preserve">
     <value>Broken piece</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="CauseLabel" xml:space="preserve">
     <value>Cause</value>
   </data>
   <data name="CellLabel" xml:space="preserve">
     <value>Cell</value>
+  </data>
+  <data name="ChangeStatus" xml:space="preserve">
+    <value>Change status</value>
   </data>
   <data name="ChatTitle" xml:space="preserve">
     <value>Chat</value>
@@ -153,14 +171,32 @@
   <data name="ClosedLabel" xml:space="preserve">
     <value>Closed</value>
   </data>
+  <data name="CloseStatus" xml:space="preserve">
+    <value>Close status</value>
+  </data>
+  <data name="CloseStatusMessage" xml:space="preserve">
+    <value>Are you sure you want to change the status to Closed?</value>
+  </data>
   <data name="DashboardPageTitle" xml:space="preserve">
     <value>Dashboard</value>
+  </data>
+  <data name="DateFormat" xml:space="preserve">
+    <value>MMM-dd-yyyy</value>
   </data>
   <data name="DetailPageTitle" xml:space="preserve">
     <value>Detail</value>
   </data>
   <data name="DetailsLabel" xml:space="preserve">
     <value>Details</value>
+  </data>
+  <data name="DoneAddDetailAlert" xml:space="preserve">
+    <value>Detail added successfully</value>
+  </data>
+  <data name="DoneAssignTicketAlert" xml:space="preserve">
+    <value>Ticket was assigned correctly</value>
+  </data>
+  <data name="DoneCloseTicketAlert" xml:space="preserve">
+    <value>The status changed correctly</value>
   </data>
   <data name="DownLabel" xml:space="preserve">
     <value>DOWN</value>
@@ -171,6 +207,27 @@
   <data name="ElementsLabel" xml:space="preserve">
     <value>Elements</value>
   </data>
+  <data name="EmailFail" xml:space="preserve">
+    <value>The email format is wrong, please check and try again.</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailRequired" xml:space="preserve">
+    <value>The Email field is required.</value>
+  </data>
+  <data name="EmailSent" xml:space="preserve">
+    <value>The Email was sent.</value>
+  </data>
+  <data name="FailAddDetailAlert" xml:space="preserve">
+    <value>Error adding detail</value>
+  </data>
+  <data name="FailAssignTicketAlert" xml:space="preserve">
+    <value>Failed to assign ticket</value>
+  </data>
+  <data name="FailCloseTicketAlert" xml:space="preserve">
+    <value>Failed to change status</value>
+  </data>
   <data name="FailureMold" xml:space="preserve">
     <value>Failure in mold</value>
   </data>
@@ -179,6 +236,9 @@
   </data>
   <data name="ForgotPassword" xml:space="preserve">
     <value>Forgot password</value>
+  </data>
+  <data name="ForgotPasswordMessage" xml:space="preserve">
+    <value>Enter your email to retrieve your password.</value>
   </data>
   <data name="FourteenMinutes" xml:space="preserve">
     <value>14 minutes ago</value>
@@ -198,6 +258,9 @@
   <data name="InProcessLabel" xml:space="preserve">
     <value>In Process</value>
   </data>
+  <data name="InProduction" xml:space="preserve">
+    <value>In Production</value>
+  </data>
   <data name="LackMaterial" xml:space="preserve">
     <value>Lack of material</value>
   </data>
@@ -206,6 +269,9 @@
   </data>
   <data name="LeakLabel" xml:space="preserve">
     <value>Leak</value>
+  </data>
+  <data name="LoginFail" xml:space="preserve">
+    <value>Invalid username or password.</value>
   </data>
   <data name="MachineStatusTitle" xml:space="preserve">
     <value>Machine status</value>
@@ -273,6 +339,9 @@
   <data name="OEELabel" xml:space="preserve">
     <value>OEE</value>
   </data>
+  <data name="OEEMachines" xml:space="preserve">
+    <value>OEE Machines</value>
+  </data>
   <data name="OneHour" xml:space="preserve">
     <value>1 hour ago</value>
   </data>
@@ -285,20 +354,32 @@
   <data name="PasswordPlaceHolder" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>The password field is required.</value>
+  </data>
   <data name="PigmentNeeded" xml:space="preserve">
     <value>Pigment needed</value>
   </data>
   <data name="PlantLabel" xml:space="preserve">
     <value>Plant</value>
   </data>
+  <data name="ProfilePageTitle" xml:space="preserve">
+    <value>Profile</value>
+  </data>
   <data name="ProgressLabel" xml:space="preserve">
     <value>Progress</value>
+  </data>
+  <data name="QualityInspector" xml:space="preserve">
+    <value>Quality Inspector</value>
   </data>
   <data name="QualityLabel" xml:space="preserve">
     <value>Quality</value>
   </data>
   <data name="RawMaterial" xml:space="preserve">
     <value>Raw material missing</value>
+  </data>
+  <data name="Reassign" xml:space="preserve">
+    <value>Reassign</value>
   </data>
   <data name="RememberMe" xml:space="preserve">
     <value>Remember me</value>
@@ -317,6 +398,9 @@
   </data>
   <data name="ScrapTitle" xml:space="preserve">
     <value>Scrap</value>
+  </data>
+  <data name="SearchLabel" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="SecurityLabel" xml:space="preserve">
     <value>Security</value>
@@ -363,10 +447,58 @@
   <data name="UsernamePlaceHolder" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="UsernameRequired" xml:space="preserve">
+    <value>The username field is required.</value>
+  </data>
+  <data name="VersionLabel" xml:space="preserve">
+    <value>Version</value>
+  </data>
   <data name="WeekButton" xml:space="preserve">
     <value>Week</value>
   </data>
+  <data name="WithoutInfo" xml:space="preserve">
+    <value>No information to display</value>
+  </data>
+  <data name="WithoutProducing" xml:space="preserve">
+    <value>Without Producing</value>
+  </data>
   <data name="YesterdayLabel" xml:space="preserve">
     <value>Yesterday</value>
+  </data>
+  <data name="_01" xml:space="preserve">
+    <value>Jan</value>
+  </data>
+  <data name="_02" xml:space="preserve">
+    <value>Feb</value>
+  </data>
+  <data name="_03" xml:space="preserve">
+    <value>Mar</value>
+  </data>
+  <data name="_04" xml:space="preserve">
+    <value>Apr</value>
+  </data>
+  <data name="_05" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="_06" xml:space="preserve">
+    <value>Jun</value>
+  </data>
+  <data name="_07" xml:space="preserve">
+    <value>Jul</value>
+  </data>
+  <data name="_08" xml:space="preserve">
+    <value>Aug</value>
+  </data>
+  <data name="_09" xml:space="preserve">
+    <value>Sep</value>
+  </data>
+  <data name="_10" xml:space="preserve">
+    <value>Oct</value>
+  </data>
+  <data name="_11" xml:space="preserve">
+    <value>Nov</value>
+  </data>
+  <data name="_12" xml:space="preserve">
+    <value>Dec</value>
   </data>
 </root>

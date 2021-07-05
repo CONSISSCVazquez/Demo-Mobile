@@ -127,22 +127,6 @@ namespace Flexbaze.ViewModels
             try
             {
                 NotificationsModel result;
-                //string json = await _request.GetData("app", "{\"metodo\": \"app_getNotificationByNode\",\"attr\": {\"clave\":\"" + Settings.Client + "\",\"node\":\"" + _node +"\",\"user\": \"" + Settings.Node + "\"}}");
-                //if (json != "-1000")
-                //{
-                //    result = JsonConvert.DeserializeObject<NotificationsModel>(json);
-                //    Notification=result.result;
-                //    if (focusLastItem)
-                //    {
-                //        // se le da un tiempo para que se cargue la lista de mensajes
-                //        await Task.Delay(500);
-                //        if (_listViewMessages.ItemsSource.OfType<MessagesModel>().Count() > 0)
-                //        {
-                //            var lastItem = _listViewMessages.ItemsSource.OfType<MessagesModel>().Last();
-                //            _listViewMessages.ScrollTo(lastItem, ScrollToPosition.MakeVisible, true);
-                //        }
-                //    }
-                //}
                 PullToRefresh.IsRefreshing = false;
             }
             catch (Exception e)

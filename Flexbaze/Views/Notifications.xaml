@@ -4,6 +4,8 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Conv="clr-namespace:Flexbaze.Converters"
+             xmlns:fonts="clr-namespace:Flexbaze.Fonts;assembly=Flexbaze"
+             xmlns:Button="clr-namespace:Flexbaze.Models"
              xmlns:resources="clr-namespace:Flexbaze.Resources"
              mc:Ignorable="d"
              x:Class="Flexbaze.Views.Notifications">
@@ -15,7 +17,6 @@
     <NavigationPage.TitleView>
         <StackLayout Orientation="Horizontal"
                 VerticalOptions="Center"
-                Padding="0,0,40,0"
                 Spacing="10">
             <Label
                    Text="{x:Static resources:AppResources.NotificationsTitle}"
@@ -32,17 +33,21 @@
                          BackgroundColor="Transparent"
                          HorizontalOptions="FillAndExpand"
                          Padding="10,10,10,10">
-                <Button Text="{x:Static resources:AppResources.UnreadLabel}"
+                <Button:NormalTextButton Text="{x:Static resources:AppResources.UnreadLabel}"
                         BackgroundColor="{Binding BtnNewColor}"
                         BorderColor="{StaticResource bright}"
+                        TextColor="{StaticResource TextMasterMenu}"
+                        HeightRequest="40"
                         BorderWidth="1"
                         Visual="Material"
                         HorizontalOptions="FillAndExpand"
                         Command="{Binding FilterAlerts}"
                         CommandParameter="news"/>
-                <Button Text="{x:Static resources:AppResources.AllLabel}"
+                <Button:NormalTextButton Text="{x:Static resources:AppResources.AllLabel}"
                         BackgroundColor="{Binding BtnAllColor}"
                         BorderColor="{StaticResource bright}"
+                        TextColor="{StaticResource TextMasterMenu}"
+                        HeightRequest="40"
                         BorderWidth="1"
                         Visual="Material"
                         HorizontalOptions="FillAndExpand"
@@ -58,13 +63,14 @@
                     RowHeight="100"
                     RefreshCommand="{Binding Refresh}"
                     HasUnevenRows="false"
+                    BackgroundColor="Transparent"
                     SeparatorVisibility="None"
                     HeightRequest="{Binding HeightListViewSupport}"
                     ItemsSource="{Binding FilterAlertList}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Frame BackgroundColor="{StaticResource dropDark}"
+                                <Frame BackgroundColor="{StaticResource dark}"
                                     Margin="10,5,10,5"
                                     Padding="0">
                                     <Frame.GestureRecognizers>
@@ -112,6 +118,69 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </StackLayout>
+            <Frame BackgroundColor="{StaticResource dark}"
+                   Padding="0"
+                   CornerRadius="8">
+                <StackLayout BackgroundColor="Transparent"
+                    Orientation="Horizontal"
+                    HorizontalOptions="FillAndExpand"
+                    Padding="10,0,10,20">
+                    <Button
+                        x:Name="mnuDashboard"
+                        ImageSource="dashboard_white.png"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        Clicked="MnuDashboard_Clicked"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,5,5,5"/>
+                    <Button 
+                        x:Name="mnuSupport"
+                        Text="{x:Static fonts:IconFont.Support}"
+                        Clicked="MnuSupport_Clicked"
+                        FontSize="15"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        FontFamily="fontello"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,5,5,5"/>
+                    <Button 
+                        x:Name="mnuOEE"
+                        Text="{x:Static fonts:IconFont.ThList}"
+                        Clicked="MnuOEE_Clicked"
+                        FontSize="17"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        FontFamily="fontello"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,5,5,5"/>
+                    <Button 
+                        x:Name="mnuNotification"
+                        Text="{x:Static fonts:IconFont.Notifications}"
+                        Clicked="MnuNotification_Clicked"
+                        FontSize="17"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        FontFamily="fontello"
+                        TextColor="{StaticResource bright}"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,0,5,0"/>
+                    <Button 
+                        x:Name="mnuProfile"
+                        ImageSource="user_white.png"
+                        Clicked="MnuProfile_Clicked"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,5,5,5"/>
+                </StackLayout>
+            </Frame>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

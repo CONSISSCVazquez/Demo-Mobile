@@ -116,10 +116,8 @@ namespace Flexbaze
 
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        Master mstrView = new Master();
                         Alerts alerta = new Alerts();
                         alerta = JsonConvert.DeserializeObject<Alerts>(extraMessage);
-                        mstrView.NotificationOpened(alerta);
                     });
                 }
             }

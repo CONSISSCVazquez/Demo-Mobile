@@ -19,6 +19,7 @@ namespace Flexbaze.Models
         public Boolean IsActive { get; set; }
         public DateTime DateJoined { get; set; }
         public List<CellType> Cells { get; set; }
+        public ProfileType Profile { get; set; }
         public List<CertificationType> Certifications { get; set; }
         public List<SupportTicketType> ReportedByTickets { get; set; }
         public List<SupportTicketType> AssignedToTickets { get; set; }

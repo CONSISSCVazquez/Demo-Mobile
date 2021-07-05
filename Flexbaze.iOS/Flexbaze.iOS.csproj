@@ -68,6 +68,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\BorderlessPickerRenderer.cs" />
+    <Compile Include="Renderers\NormalTextButtonRenderer.cs" />
     <Compile Include="Renderers\TransparentEntryRenderer.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />

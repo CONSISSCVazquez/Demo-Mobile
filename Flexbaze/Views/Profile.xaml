@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fonts="clr-namespace:Flexbaze.Fonts;assembly=Flexbaze"
+             xmlns:resources="clr-namespace:Flexbaze.Resources"
+             mc:Ignorable="d"
+             x:Class="Flexbaze.Views.Profile">
+    <!--TitleBar-->
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal"
+                VerticalOptions="Center"
+                Padding="0,0,40,0"
+                Spacing="10">
+            <Label
+                   Text="{x:Static resources:AppResources.ProfilePageTitle}"
+                   TextColor="White"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   VerticalTextAlignment="Center"
+                   HorizontalOptions="CenterAndExpand"/>
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical"
+            BackgroundColor="Transparent"
+            Margin="0">
+            <!--Profile-->
+            <StackLayout Orientation="Horizontal"
+                BackgroundColor="Transparent"
+                Margin="40,10,10,10"
+                HorizontalOptions="FillAndExpand">
+                <Frame BackgroundColor="Transparent"
+                    CornerRadius="18"
+                    HeightRequest="36"
+                    WidthRequest="36"
+                    IsClippedToBounds="True"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Padding="0">
+                    <Image Source="Andres.jpg"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"/>
+                </Frame>
+                <StackLayout Orientation="Vertical"
+                    BackgroundColor="Transparent"
+                    Padding="5,10,10,10">
+                    <Label Text="Felipe Nuñez"
+                        FontSize="16"
+                        Padding="5,5,0,0"/>
+                    <Label Text="{x:Static resources:AppResources.QualityInspector}"
+                        FontSize="12"
+                        Padding="5,0,0,5"/>
+                </StackLayout>
+            </StackLayout>
+            <StackLayout Margin="0"
+                Orientation="Vertical">
+                <!--Language-->
+                <Frame Margin="10,5,10,0"
+                    BackgroundColor="{StaticResource dark}"
+                    HeightRequest="60"
+                    CornerRadius="4"
+                    Padding="0,5,5,0">
+                    <StackLayout Orientation="Horizontal"
+                            BackgroundColor="Transparent"
+                            Padding="10,10,10,10">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1"
+                                Tapped="BtnLanguage_Clicked"/>
+                        </StackLayout.GestureRecognizers>
+                        <Label Text="{x:Static fonts:IconFont.Cog}"
+                            Padding="33,10,17,10"
+                            FontSize="20"
+                            FontFamily="fontello"
+                            TextColor="White"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center"/>
+                        <Label Text="{x:Static resources:AppResources.MasterMenuLanguage}"
+                            FontSize="16"
+                            TextColor="White"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Start"/>
+                        <Label Text="{x:Static fonts:IconFont.AngleDown}"
+                            FontSize="16"
+                            FontFamily="fontello"
+                            TextColor="White"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="EndAndExpand"/>
+                    </StackLayout>
+                </Frame>
+                <StackLayout Orientation="Vertical"
+                    Padding="0"
+                    IsVisible="false"
+                    x:Name="slLanguages"
+                    BackgroundColor="Transparent">
+                    <Frame Margin="10,-6,10,-6"
+                        BackgroundColor="{StaticResource dark}"
+                        HeightRequest="60"
+                        CornerRadius="4"
+                        Padding="0,5,5,0">
+                        <StackLayout Orientation="Vertical"
+                            Padding="10,-6,10,0"
+                            BackgroundColor="Transparent">
+                            <StackLayout Orientation="Horizontal"
+                                BackgroundColor="{StaticResource dark}"
+                                HeightRequest="60"
+                                Padding="10,0,10,0">
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1"
+                                        Tapped="BtnSpanish_Clicked"/>
+                                </StackLayout.GestureRecognizers>
+                                <Image Source="mexicoFlag.png"
+                                    Margin="10,0,10,0"
+                                    VerticalOptions="Center" 
+                                    HorizontalOptions="Center"/>
+                                <Label Text="{x:Static resources:AppResources.MasterMenuSpanish}"
+                                    FontSize="16"
+                                    TextColor="White"
+                                    VerticalOptions="Center" 
+                                    HorizontalOptions="Start"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </Frame>
+                    <Line BackgroundColor="#5167D1"
+                          HeightRequest="1"
+                          Margin="11,0,11,0"/>
+                    <Frame Margin="10,-6,10,0"
+                        BackgroundColor="{StaticResource dark}"
+                        HeightRequest="60"
+                        CornerRadius="4"
+                        Padding="0,5,5,0">
+                        <StackLayout Orientation="Horizontal"
+                            BackgroundColor="{StaticResource dark}"
+                            Padding="10,10,10,10">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1"
+                                Tapped="BtnEnglish_Clicked"/>
+                            </StackLayout.GestureRecognizers>
+                            <Image Source="usaFlag.png"
+                                Margin="20,0,10,0"
+                                VerticalOptions="Center" 
+                                HorizontalOptions="Center"/>
+                            <Label Text="{x:Static resources:AppResources.MasterMenuEnglish}"
+                                FontSize="16"
+                                TextColor="White"
+                                VerticalOptions="Center" 
+                                HorizontalOptions="Start"/>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+                <!--Logout-->
+                <Frame Margin="10,5,10,0"
+                    BackgroundColor="{StaticResource dark}"
+                    HeightRequest="60"
+                    CornerRadius="4"
+                    Padding="0,5,5,0">
+                    <StackLayout Orientation="Horizontal"
+                            BackgroundColor="Transparent"
+                            Padding="10,10,10,10">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1"
+                                Tapped="BtnLogout_Clicked"/>
+                        </StackLayout.GestureRecognizers>
+                        <Label Text="{x:Static fonts:IconFont.Logout}"
+                            Padding="33,10,17,10"
+                            FontSize="20"
+                            FontFamily="fontello"
+                            TextColor="White"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center"/>
+                        <Label Text="{x:Static resources:AppResources.MasterMenuSignOut}"
+                            FontSize="16"
+                            TextColor="White"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Start"/>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+            <!--Footer-->
+            <Frame Margin="10,5,10,0"
+                    BackgroundColor="Transparent"
+                    HeightRequest="60"
+                    CornerRadius="4"
+                    VerticalOptions="FillAndExpand"
+                    Padding="0,5,5,0">
+                <StackLayout Orientation="Horizontal"
+                    BackgroundColor="Transparent"
+                    Padding="10,10,10,10">
+                    <Image Source="flexbazeLogo.png"
+                        HeightRequest="46"
+                        WidthRequest="144"
+                        VerticalOptions="End"/>
+                    <Label Text="{x:Static resources:AppResources.VersionLabel}"
+                        x:Name="lblVersion"
+                        FontSize="12"
+                        TextColor="White"
+                        VerticalOptions="End" 
+                        Padding="0,0,10,10"
+                        HorizontalOptions="EndAndExpand"/>
+                </StackLayout>
+            </Frame>
+            <!--Menu-->
+            <Frame BackgroundColor="{StaticResource dark}"
+                   Padding="0"
+                   CornerRadius="8">
+                <StackLayout BackgroundColor="Transparent"
+                    Orientation="Horizontal"
+                    HorizontalOptions="FillAndExpand"
+                    Padding="10,0,10,20">
+                    <Button
+                        x:Name="mnuDashboard"
+                        ImageSource="dashboard_white.png"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        Clicked="MnuDashboard_Clicked"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,5,5,5"/>
+                    <Button 
+                        x:Name="mnuSupport"
+                        Text="{x:Static fonts:IconFont.Support}"
+                        Clicked="MnuSupport_Clicked"
+                        FontSize="15"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        FontFamily="fontello"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,5,5,5"/>
+                    <Button 
+                        x:Name="mnuOEE"
+                        Text="{x:Static fonts:IconFont.ThList}"
+                        Clicked="MnuOEE_Clicked"
+                        FontSize="17"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        FontFamily="fontello"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,5,5,5"/>
+                    <Button 
+                        x:Name="mnuNotification"
+                        Text="{x:Static fonts:IconFont.Notifications}"
+                        Clicked="MnuNotification_Clicked"
+                        FontSize="17"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        FontFamily="fontello"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,0,5,0"/>
+                    <Button 
+                        x:Name="mnuUser"
+                        ImageSource="user_blue.png"
+                        Clicked="MnuUser_Clicked"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,5,5,5"/>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

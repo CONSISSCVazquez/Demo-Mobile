@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace Flexbaze.Droid
 {
-    [Activity(Label = "Flexbaze", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Flexbaze", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -23,7 +23,8 @@ namespace Flexbaze.Droid
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
             Plugin.InputKit.Platforms.Droid.Config.Init(this, savedInstanceState);
             LoadApplication(new App());
-            Window.SetStatusBarColor(Android.Graphics.Color.ParseColor("#101630"));
+            Window.SetStatusBarColor(Android.Graphics.Color.Argb(255, 16, 22, 48));
+            Window.SetNavigationBarColor(Android.Graphics.Color.Argb(255, 16, 22, 48));
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

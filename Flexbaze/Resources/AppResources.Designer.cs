@@ -61,11 +61,155 @@ namespace Flexbaze.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Jan.
+        /// </summary>
+        public static string _01 {
+            get {
+                return ResourceManager.GetString("_01", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Feb.
+        /// </summary>
+        public static string _02 {
+            get {
+                return ResourceManager.GetString("_02", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Mar.
+        /// </summary>
+        public static string _03 {
+            get {
+                return ResourceManager.GetString("_03", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Apr.
+        /// </summary>
+        public static string _04 {
+            get {
+                return ResourceManager.GetString("_04", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a May.
+        /// </summary>
+        public static string _05 {
+            get {
+                return ResourceManager.GetString("_05", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Jun.
+        /// </summary>
+        public static string _06 {
+            get {
+                return ResourceManager.GetString("_06", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Jul.
+        /// </summary>
+        public static string _07 {
+            get {
+                return ResourceManager.GetString("_07", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Aug.
+        /// </summary>
+        public static string _08 {
+            get {
+                return ResourceManager.GetString("_08", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sep.
+        /// </summary>
+        public static string _09 {
+            get {
+                return ResourceManager.GetString("_09", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Oct.
+        /// </summary>
+        public static string _10 {
+            get {
+                return ResourceManager.GetString("_10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Nov.
+        /// </summary>
+        public static string _11 {
+            get {
+                return ResourceManager.GetString("_11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Dec.
+        /// </summary>
+        public static string _12 {
+            get {
+                return ResourceManager.GetString("_12", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Accept.
+        /// </summary>
+        public static string Accept {
+            get {
+                return ResourceManager.GetString("Accept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Accidents.
         /// </summary>
         public static string AccidentsButton {
             get {
                 return ResourceManager.GetString("AccidentsButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Add detail.
+        /// </summary>
+        public static string AddDetail {
+            get {
+                return ResourceManager.GetString("AddDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Are you sure you want to add this detail?.
+        /// </summary>
+        public static string AddDetailMessage {
+            get {
+                return ResourceManager.GetString("AddDetailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Add details.
+        /// </summary>
+        public static string AddDetails {
+            get {
+                return ResourceManager.GetString("AddDetails", resourceCulture);
             }
         }
         
@@ -124,6 +268,15 @@ namespace Flexbaze.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Cause.
         /// </summary>
         public static string CauseLabel {
@@ -138,6 +291,15 @@ namespace Flexbaze.Resources {
         public static string CellLabel {
             get {
                 return ResourceManager.GetString("CellLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Change status.
+        /// </summary>
+        public static string ChangeStatus {
+            get {
+                return ResourceManager.GetString("ChangeStatus", resourceCulture);
             }
         }
         
@@ -169,11 +331,38 @@ namespace Flexbaze.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Close status.
+        /// </summary>
+        public static string CloseStatus {
+            get {
+                return ResourceManager.GetString("CloseStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Are you sure you want to change the status to Closed?.
+        /// </summary>
+        public static string CloseStatusMessage {
+            get {
+                return ResourceManager.GetString("CloseStatusMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Dashboard.
         /// </summary>
         public static string DashboardPageTitle {
             get {
                 return ResourceManager.GetString("DashboardPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a MMM-dd-yyyy.
+        /// </summary>
+        public static string DateFormat {
+            get {
+                return ResourceManager.GetString("DateFormat", resourceCulture);
             }
         }
         
@@ -192,6 +381,33 @@ namespace Flexbaze.Resources {
         public static string DetailsLabel {
             get {
                 return ResourceManager.GetString("DetailsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Detail added successfully.
+        /// </summary>
+        public static string DoneAddDetailAlert {
+            get {
+                return ResourceManager.GetString("DoneAddDetailAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ticket was assigned correctly.
+        /// </summary>
+        public static string DoneAssignTicketAlert {
+            get {
+                return ResourceManager.GetString("DoneAssignTicketAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a The status changed correctly.
+        /// </summary>
+        public static string DoneCloseTicketAlert {
+            get {
+                return ResourceManager.GetString("DoneCloseTicketAlert", resourceCulture);
             }
         }
         
@@ -223,6 +439,69 @@ namespace Flexbaze.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a The email format is wrong, please check and try again..
+        /// </summary>
+        public static string EmailFail {
+            get {
+                return ResourceManager.GetString("EmailFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Email.
+        /// </summary>
+        public static string EmailLabel {
+            get {
+                return ResourceManager.GetString("EmailLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a The Email field is required..
+        /// </summary>
+        public static string EmailRequired {
+            get {
+                return ResourceManager.GetString("EmailRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a The Email was sent..
+        /// </summary>
+        public static string EmailSent {
+            get {
+                return ResourceManager.GetString("EmailSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Error adding detail.
+        /// </summary>
+        public static string FailAddDetailAlert {
+            get {
+                return ResourceManager.GetString("FailAddDetailAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Failed to assign ticket.
+        /// </summary>
+        public static string FailAssignTicketAlert {
+            get {
+                return ResourceManager.GetString("FailAssignTicketAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Failed to change status.
+        /// </summary>
+        public static string FailCloseTicketAlert {
+            get {
+                return ResourceManager.GetString("FailCloseTicketAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Failure in mold.
         /// </summary>
         public static string FailureMold {
@@ -246,6 +525,15 @@ namespace Flexbaze.Resources {
         public static string ForgotPassword {
             get {
                 return ResourceManager.GetString("ForgotPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Enter your email to retrieve your password..
+        /// </summary>
+        public static string ForgotPasswordMessage {
+            get {
+                return ResourceManager.GetString("ForgotPasswordMessage", resourceCulture);
             }
         }
         
@@ -304,6 +592,15 @@ namespace Flexbaze.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a In Production.
+        /// </summary>
+        public static string InProduction {
+            get {
+                return ResourceManager.GetString("InProduction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Lack of material.
         /// </summary>
         public static string LackMaterial {
@@ -327,6 +624,15 @@ namespace Flexbaze.Resources {
         public static string LeakLabel {
             get {
                 return ResourceManager.GetString("LeakLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invalid username or password..
+        /// </summary>
+        public static string LoginFail {
+            get {
+                return ResourceManager.GetString("LoginFail", resourceCulture);
             }
         }
         
@@ -529,6 +835,15 @@ namespace Flexbaze.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a OEE Machines.
+        /// </summary>
+        public static string OEEMachines {
+            get {
+                return ResourceManager.GetString("OEEMachines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a 1 hour ago.
         /// </summary>
         public static string OneHour {
@@ -565,6 +880,15 @@ namespace Flexbaze.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a The password field is required..
+        /// </summary>
+        public static string PasswordRequired {
+            get {
+                return ResourceManager.GetString("PasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Pigment needed.
         /// </summary>
         public static string PigmentNeeded {
@@ -583,11 +907,29 @@ namespace Flexbaze.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Profile.
+        /// </summary>
+        public static string ProfilePageTitle {
+            get {
+                return ResourceManager.GetString("ProfilePageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Progress.
         /// </summary>
         public static string ProgressLabel {
             get {
                 return ResourceManager.GetString("ProgressLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Quality Inspector.
+        /// </summary>
+        public static string QualityInspector {
+            get {
+                return ResourceManager.GetString("QualityInspector", resourceCulture);
             }
         }
         
@@ -606,6 +948,15 @@ namespace Flexbaze.Resources {
         public static string RawMaterial {
             get {
                 return ResourceManager.GetString("RawMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Reassign.
+        /// </summary>
+        public static string Reassign {
+            get {
+                return ResourceManager.GetString("Reassign", resourceCulture);
             }
         }
         
@@ -660,6 +1011,15 @@ namespace Flexbaze.Resources {
         public static string ScrapTitle {
             get {
                 return ResourceManager.GetString("ScrapTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Search.
+        /// </summary>
+        public static string SearchLabel {
+            get {
+                return ResourceManager.GetString("SearchLabel", resourceCulture);
             }
         }
         
@@ -799,11 +1159,47 @@ namespace Flexbaze.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a The username field is required..
+        /// </summary>
+        public static string UsernameRequired {
+            get {
+                return ResourceManager.GetString("UsernameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Version.
+        /// </summary>
+        public static string VersionLabel {
+            get {
+                return ResourceManager.GetString("VersionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Week.
         /// </summary>
         public static string WeekButton {
             get {
                 return ResourceManager.GetString("WeekButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No information to display.
+        /// </summary>
+        public static string WithoutInfo {
+            get {
+                return ResourceManager.GetString("WithoutInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Without Producing.
+        /// </summary>
+        public static string WithoutProducing {
+            get {
+                return ResourceManager.GetString("WithoutProducing", resourceCulture);
             }
         }
         

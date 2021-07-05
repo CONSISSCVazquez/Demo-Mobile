@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Flexbaze.Converters;
 using Flexbaze.Models;
 using Flexbaze.Resources;
+using Flexbaze.Util;
+using Flexbaze.ViewModels.Base;
+using Flexbaze.Views;
+using Xamarin.Forms;
 
 namespace Flexbaze.ViewModels
 {
-    class SupportDetailViewModel : INotifyPropertyChanged
+    class SupportDetailViewModel : BaseViewModel, INotifyPropertyChanged
     {
         private Request _request = new Request();
         private string _title;
+        private string _id;
         private string _plant;
         private string _cell;
         private string _machine;
@@ -19,9 +27,32 @@ namespace Flexbaze.ViewModels
         private User _reportedBy;
         private User _resolvedBy;
         private string _imgStatus;
+        private string _imgCurrentUser;
+        private string _btnAssignText;
+        private bool _btnAssignIsEnabled;
+        private bool _changedOk;
         private List<TicketStatus> _statusList;
-        private List<string> _detailList;
+        private ObservableCollection<TicketEventType> _detailList;
+        private List<string> _statusSelectList;
+        private string _statusSelected;
+        private bool _btnChangeStatIsEnabled;
+        public Command CmdAssign { get; private set; }
+        public Command CmdAddDetails { get; private set; }
+        public Command CmdChangeStatus { get; private set; }
 
+        public INavigation Navigation { get; set; }
+
+        private double _heightListDetail;
+
+        public double HeightListDetail
+        {
+            get => _heightListDetail;
+            private set
+            {
+                _heightListDetail = value;
+                OnPropertyChanged();
+            }
+        }
         public string Title
         {
             get => _title;
@@ -38,6 +69,16 @@ namespace Flexbaze.ViewModels
             private set
             {
                 _plant = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Id
+        {
+            get => _id;
+            private set
+            {
+                _id = value;
                 OnPropertyChanged();
             }
         }
@@ -92,6 +133,46 @@ namespace Flexbaze.ViewModels
             }
         }
 
+        public string ImgCurrentUser
+        {
+            get => _imgCurrentUser;
+            private set
+            {
+                _imgCurrentUser = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string BtnAssignText
+        {
+            get => _btnAssignText;
+            private set
+            {
+                _btnAssignText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool BtnAssignIsEnabled
+        {
+            get => _btnAssignIsEnabled;
+            private set
+            {
+                _btnAssignIsEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ChangedOk
+        {
+            get => _changedOk;
+            private set
+            {
+                _changedOk = value;
+                OnPropertyChanged();
+            }
+        }
+
         public User ReportedBy
         {
             get => _reportedBy;
@@ -122,7 +203,7 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public List<string> DetailList
+        public ObservableCollection<TicketEventType> DetailList
         {
             get => _detailList;
             private set
@@ -132,86 +213,228 @@ namespace Flexbaze.ViewModels
             }
         }
 
-
-        public SupportDetailViewModel(string ticketId, string status)
+        public List<string> StatusSelectList
         {
-            Ini(ticketId);
-            GetDetails(ticketId, status);
+            get => _statusSelectList;
+            private set
+            {
+                _statusSelectList = value;
+                OnPropertyChanged();
+            }
         }
 
-        private void Ini(string ticketId)
+        public string StatusSelected
         {
-            Title = AppResources.DetailPageTitle + " " + ticketId;
+            get => _statusSelected;
+            private set
+            {
+                _statusSelected = value;
+                OnPropertyChanged();
+            }
         }
 
-        private void GetDetails(string ticketId, string status)
+        public bool BtnChangeStatIsEnabled
         {
-            Plant = "1";
-            Cell = "C1";
-            Machine = "M301";
-            Status = status;
-            if (status.Equals(AppResources.InProcessLabel))
+            get => _btnChangeStatIsEnabled;
+            private set
             {
-                ImgStatus = "clock.png";
-            } else
+                _btnChangeStatIsEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public SupportDetailViewModel(TicketComplete ticket, string Factory, INavigation navigation) : base()
+        {
+            showIndicator();
+            Id = ticket.Id;
+            Ini(navigation);
+            Plant = Factory;
+            Cell = ticket.Cell.Name;
+            Machine = ticket.Machine.Name;
+            Status = ticket.Status;
+            ImgCurrentUser = Settings.Picture == null || Settings.Picture == "" ? "user_icon.png" : Settings.Picture;
+            StatusSelectList = new List<string>();
+            if (Status.Equals(AppResources.OpenLabel))
             {
-                if (status.Equals(AppResources.ClosedLabel))
+                ImgStatus = "open.png";
+                BtnAssignIsEnabled = true;
+                BtnAssignText = AppResources.AssignLabel;
+                StatusSelectList.Add(AppResources.ChangeStatus);
+                StatusSelectList.Add(AppResources.ClosedLabel);
+                StatusSelected = AppResources.ChangeStatus;
+                BtnChangeStatIsEnabled = false;
+            }
+            else
+            {
+                if (Status.Equals(AppResources.InProcessLabel))
                 {
-                    ImgStatus = "done.png";
+                    ImgStatus = "clock.png";
+                    BtnAssignIsEnabled = true;
+                    BtnAssignText = AppResources.Reassign;
+                    StatusSelectList.Add(AppResources.ChangeStatus);
+                    StatusSelectList.Add(AppResources.ClosedLabel);
+                    StatusSelected = AppResources.ChangeStatus;
+                    BtnChangeStatIsEnabled = true;
+                }
+                else
+                {
+                    if (Status.Equals(AppResources.ClosedLabel))
+                    {
+                        ImgStatus = "done.png";
+                        BtnAssignIsEnabled = true;
+                        BtnAssignText = AppResources.Reassign;
+                        BtnChangeStatIsEnabled = false;
+                    }
                 }
             }
             ReportedBy = new User
             {
-                ImgUser = "female.png",
-                Name = "Sofía Herrera",
-                JobTitle = "Inspector de Calidad"
+                ImgUser = ticket.ReportedBy.Profile.Picture.Equals(null) || ticket.ReportedBy.Profile.Picture.Equals("") ? "user_icon.png" : ticket.ReportedBy.Profile.Picture,
+                Name = ticket.ReportedBy.Profile.Name.Equals(null) || ticket.ReportedBy.Profile.Name.Equals("") ? ticket.ReportedBy.FirstName + " " + ticket.ReportedBy.LastName : ticket.ReportedBy.Profile.Name,
+                JobTitle = ticket.ReportedBy.Groups.Count > 0 ? ticket.ReportedBy.Groups[0].Name : ""
             };
             ResolvedBy = new User
             {
-                ImgUser = "Andres.png",
-                Name = "Roberto Gómez",
-                JobTitle = "Técnico"
+                ImgUser = ticket.AssignedTo.Profile.Picture.Equals(null) || ticket.AssignedTo.Profile.Picture.Equals("") ? "user_icon.png" : ticket.AssignedTo.Profile.Picture,
+                Name = ticket.AssignedTo.Profile.Name.Equals(null) || ticket.AssignedTo.Profile.Name.Equals("") ? ticket.AssignedTo.FirstName + " " + ticket.AssignedTo.LastName : ticket.AssignedTo.Profile.Name,
+                JobTitle = ticket.AssignedTo.Groups.Count > 0 ? ticket.AssignedTo.Groups[0].Name : ""
             };
+            MainDetail = ticket.Description;
             StatusList = new List<TicketStatus>();
-            TicketStatus t1 = new TicketStatus {
-                Status = AppResources.OpenLabel,
-                ImgStatus = "open.png",
-                Hour = "07 Julio 2020 - 10:29 AM"
-            };
-            TicketStatus t2 = new TicketStatus
+            DetailList = new ObservableCollection<TicketEventType>();
+            MonthNumberToStringConverter conv = new MonthNumberToStringConverter();
+            if (ticket.StartedAt != null)
             {
-                Status = AppResources.InProcessLabel,
-                ImgStatus = "clock.png",
-                Hour = "07 Julio 2020 - 11:00 AM"
-            };
-            TicketStatus t3 = new TicketStatus
-            {
-                Status = AppResources.ClosedLabel,
-                ImgStatus = "done.png",
-                Hour = "07 Julio 2020 - 12:00 PM"
-            };
-            StatusList.Add(t1);
-            StatusList.Add(t2);
-            if (status.Equals(AppResources.ClosedLabel))
-            {
-                StatusList.Add(t3);
+                TicketStatus ts = new TicketStatus();
+                ts.Status = AppResources.OpenLabel;
+                ts.ImgStatus = "open.png";
+                ts.Hour = AppResources.DateFormat.Equals("dd-MMM-yyyy") ? ticket.StartedAt.ToString("dd") + " " + conv.Convert(ticket.StartedAt.ToString("MM")) + " " + ticket.StartedAt.ToString("yyyy hh:mm tt") : conv.Convert(ticket.StartedAt.ToString("MM")) + " " + ticket.StartedAt.ToString("dd") + " " + ticket.StartedAt.ToString("yyyy hh:mm tt");
+                StatusList.Add(ts);
             }
-            string det1 = AppResources.LackMaterial;
-            string det2 = AppResources.FailureMold + " 392";
-            string det3 = AppResources.Maintenance;
-            string det4 = AppResources.LeakLabel;
-            string det5 = AppResources.MinorIncident;
-            string det6 = AppResources.LackMaterial;
-            List<string> details = new List<string>();
-            DetailList = new List<string>();
-            details.Add(det1);
-            details.Add(det2);
-            details.Add(det3);
-            details.Add(det4);
-            details.Add(det5);
-            details.Add(det6);
-            MainDetail = details[Int32.Parse(ticketId) - 1];
-            DetailList.Add(AppResources.MainDetail);
+            if (ticket.Events != null)
+            {
+                foreach (TicketEventType ev in ticket.Events)
+                {
+                    TicketStatus t1 = new TicketStatus();
+                    if (ev.EventType != null && ev.EventType != "" && ev.EventType != "Detail")
+                    {
+                        switch (ev.Description.Substring(0, 14))
+                        {
+                            case "Ticket assigna":
+                                t1.Status = AppResources.InProcessLabel;
+                                t1.ImgStatus = "clock.png";
+                                t1.Hour = AppResources.DateFormat.Equals("dd-MMM-yyyy") ? ev.Timestamp.ToString("dd") + " " + conv.Convert(ev.Timestamp.ToString("MM")) + " " + ev.Timestamp.ToString("yyyy hh:mm tt") : conv.Convert(ev.Timestamp.ToString("MM")) + " " + ev.Timestamp.ToString("dd") + " " + ev.Timestamp.ToString("yyyy hh:mm tt");
+                                StatusList.Add(t1);
+                                break;
+                            case "Ticket cerrado":
+                                t1.Status = AppResources.ClosedLabel;
+                                t1.ImgStatus = "done.png";
+                                t1.Hour = AppResources.DateFormat.Equals("dd-MMM-yyyy") ? ev.Timestamp.ToString("dd") + " " + conv.Convert(ev.Timestamp.ToString("MM")) + " " + ev.Timestamp.ToString("yyyy hh:mm tt") : conv.Convert(ev.Timestamp.ToString("MM")) + " " + ev.Timestamp.ToString("dd") + " " + ev.Timestamp.ToString("yyyy hh:mm tt");
+                                StatusList.Add(t1);
+                                break;
+                        }
+                    }
+                }
+
+                foreach (TicketEventType t in ticket.Events)
+                {
+                    if (t.EventType != null)
+                    {
+                        if (t.EventType.Equals("Detail"))
+                        {
+                            if (t.User.Profile.Picture == null || t.User.Profile.Picture == "")
+                            {
+                                t.User.Profile.Picture = "user_icon.png";
+                            }
+                            DetailList.Add(t);
+                        }
+                    }
+                }
+                HeightListDetail = (50 * DetailList.Count) + 40;
+            }
+            closeIndicator();
+        }
+
+        private void Ini(INavigation navigation)
+        {
+            Navigation = navigation;
+            Title = AppResources.DetailPageTitle + " " + Id;
+            CmdChangeStatus = new Command(async (param) =>
+            {
+                var toastAlert = new DisplayAlertPage(AppResources.CloseStatus, AppResources.CloseStatusMessage, AppResources.Cancel, AppResources.Accept);
+                var result = await toastAlert.Show();
+                if (result)
+                {
+                    ChangedOk = await ChangeStatus();
+                    if (ChangedOk)
+                    {
+                        var toastAlertOk = new CustomToast(Color.Green, AppResources.DoneCloseTicketAlert, "done_white.png");
+                        _ = toastAlertOk.Show();
+
+                        _ = Navigation.PopAsync();
+                    }
+                    else
+                    {
+                        var toastAlertFail = new CustomToast(Color.Red, AppResources.FailCloseTicketAlert, "close.png");
+                        _ = toastAlertFail.Show();
+
+                        _ = Navigation.PopAsync();
+                    }
+                }
+            });
+        }
+
+        public async Task<Boolean> ChangeStatus()
+        {
+            //Boolean changedOk = false;
+            //AssignTicket assign = await CloseTicketAsync(Id);
+            //if (assign.Ticket.Status != null)
+            //{
+            //    if (assign.Ticket.Status == "CLOSED")
+            //        changedOk = true;
+            //}
+            Boolean changedOk = true;
+            return changedOk;
+        }
+
+        public async Task AddDetail(string commentary)
+        {
+            var toastAlert = new DisplayAlertPage(AppResources.AddDetail, AppResources.AddDetailMessage, AppResources.Cancel, AppResources.Accept);
+            var result = await toastAlert.Show();
+            if (result)
+            {
+
+                AddTicketEvent ate = await AddDetailAsync(commentary);
+                if (ate.TicketEvent != null)
+                {
+                    var toastAlertOk = new CustomToast(Color.Green, AppResources.DoneAddDetailAlert, "done_white.png");
+                    _ = toastAlertOk.Show();
+
+                    _ = Navigation.PopAsync();
+                    DetailList.Add(new TicketEventType() { Description = commentary, User = new UserType() { Profile = new ProfileType() { Picture = Settings.Picture != null && Settings.Picture != "" ? Settings.Picture : "user_icon.png" } } });
+                    HeightListDetail = (50 * DetailList.Count) + 60;
+                }
+                else
+                {
+                    var toastAlertFail = new CustomToast(Color.Green, AppResources.FailAddDetailAlert, "done_white.png");
+                    _ = toastAlertFail.Show();
+
+                    _ = Navigation.PopAsync();
+                }
+            }
+        }
+
+        public async Task<AddTicketEvent> AddDetailAsync(string commentary)
+        {
+            AddTicketEvent result = new AddTicketEvent();
+            result.TicketEvent = new TicketEventType()
+            {
+                Id = Id,
+                Description = commentary,
+                Timestamp = DateTime.Now,
+                EventType = "Detail"
+            };
+            return result;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

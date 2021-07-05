@@ -7,13 +7,15 @@ using Flexbaze.Models;
 using System.Linq;
 using System.Collections.ObjectModel;
 using Flexbaze.Resources;
+using Flexbaze.ViewModels.Base;
 
 namespace Flexbaze.ViewModels
 {
-    class AlertsViewModel : INotifyPropertyChanged
+    class AlertsViewModel : BaseViewModel, INotifyPropertyChanged
     {
         private Request _request = new Request();
         private ObservableCollection<Alerts> _listAlerts;
+        private INavigation _navigation;
         private Color _btnNewColor;
         private Color _btnAllColor;
         private double _heightListViewSupport;
@@ -88,8 +90,9 @@ namespace Flexbaze.ViewModels
         public Command Refresh { get; private set; }
         public Command GetDetail { get; private set; }
 
-        public AlertsViewModel()
+        public AlertsViewModel(INavigation nav)
         {
+            _navigation = nav;
             Ini();
         }
 
@@ -151,9 +154,8 @@ namespace Flexbaze.ViewModels
                     }).ToList();
                     if (AlertSelected.Count == 1)
                     {
-                        App.MasterDP.IsPresented = false;
                         Alerts param = AlertSelected[0];
-                        await App.MasterDP.Detail.Navigation.PushAsync(new Views.DetalleAlerta(param));
+                        await _navigation.PushAsync(new Views.DetalleAlerta(param));
                     }
                 }
             }
@@ -191,35 +193,6 @@ namespace Flexbaze.ViewModels
         {
             try
             {
-                //string json = await _request.GetData("app", "{\"metodo\": \"app_vistaAlertas\",\"attr\": {\"clave\":\"" + Settings.Client + "\",\"show\": \"" + Settings.ShowAlerts + "\"}}");
-                //if (json != "-1000")
-                //{
-                //    AlertsModel result = JsonConvert.DeserializeObject<AlertsModel>(json);
-                //    ListAlerts = result.Result;
-                //    if (ListAlerts.Count > 0)
-                //    {
-                //        ListAlerts.ForEach((Alerts alert) =>
-                //        {
-                //            if (alert.Leido == "1")
-                //                alert.Leido = "read.png";
-                //            else
-                //                alert.Leido = "unread.png";
-                //            alert.GetDetail = GetDetail;
-
-                //            if (int.Parse(alert.MsgCount) > 0)
-                //            {
-                //                alert.HasMessages = true;
-                //            }
-                //            else
-                //            {
-                //                alert.MsgCount = string.Empty;
-                //                alert.HasMessages = false;
-                //            }
-                //        });
-                //    }
-                //    else
-                //        Visible = "true";
-                //}
                 ListAlerts = new ObservableCollection<Alerts>();
                 FilterAlertList = new ObservableCollection<Alerts>();
                 Alerts alert1 = new Alerts()

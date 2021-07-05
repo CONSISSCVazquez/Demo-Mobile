@@ -22,7 +22,17 @@ namespace Flexbaze.ViewModels
             var Query = "mutation {tokenAuth(username: \"" + user + "\", password: \"" + pwd + "\")" +
                         "{token, user {id, lastName, userPermissions {id, codename}, groups {" +
                         "id, name, permissions {id, codename}}}}}";
-            var token = await _graphQLService.Query<WebToken>("https://rjve3dgjxh.execute-api.us-east-1.amazonaws.com/dev/api/graphql", Query);
+            var token = await _graphQLService.Query<WebToken>(Baseurl, Query);
+            return token;
+        }
+
+        public async Task<SendPasswordResetEmail> SendEmail(string email)
+        {
+            var request = new GraphQLRequest();
+
+            var Query = "mutation {sendPasswordResetEmail(email: \"" + email + "\")" +
+                        "{success, errors}}";
+            var token = await _graphQLService.Query<SendPasswordResetEmail>(Baseurl, Query);
             return token;
         }
     }

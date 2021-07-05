@@ -13,6 +13,7 @@
         <Color x:Key="Flexbaze-Green">#00a889</Color>
         <Color x:Key="Flexbaze-Yellow">#ea8800</Color>
         <Color x:Key="Flexbaze-Red">#d2434a</Color>
+        <Color x:Key="Flexbaze-Gray">#c2cad1</Color>
         <Color x:Key="Ovetek-Orange">#ff810d</Color>
         <Color x:Key="Button-Bottom-Menu">#00509e</Color>
         <Color x:Key="colorAccent">#00509e</Color>

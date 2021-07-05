@@ -2,11 +2,13 @@
 using Flexbaze.Models;
 using Flexbaze.Util;
 using Flexbaze.ViewModels;
+using Flexbaze.Resources;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
 
 namespace Flexbaze.Views
 {
@@ -20,6 +22,7 @@ namespace Flexbaze.Views
             if (Settings.Language != "y" && Settings.Language != App.Language.Name)
                 App.Language = CultureInfo.GetCultureInfo(Settings.Language);
             InitializeComponent();
+            App.AppVersion = VersionTracking.CurrentVersion;
             if (Settings.UserName != "")
             {
                 UserName.Text = Settings.UserName;
@@ -58,11 +61,10 @@ namespace Flexbaze.Views
                         }
                         App.SetExternalUserId();
                         await Navigation.PushAsync(new MainPage());
-                        await App.MasterDP.Detail.Navigation.PopToRootAsync();
                     }
                     else
                     {
-                        await DisplayAlert("Flexbaze", "Invalid username or password.", "OK");
+                        await DisplayAlert("Flexbaze", AppResources.LoginFail, AppResources.Accept);
                         btnSignIn.IsEnabled = true;
                     }
                 }
@@ -83,20 +85,20 @@ namespace Flexbaze.Views
             //Valida si el valor en el Entry se encuentra vacio o es igual a Null
             if (String.IsNullOrWhiteSpace(UserName.Text))
             {
-                await DisplayAlert("Flexbaze", "The username field is required.", "OK");
+                await DisplayAlert("Flexbaze", AppResources.UsernameRequired, AppResources.Accept);
                 return false;
             }
             else if (String.IsNullOrWhiteSpace(Password.Text))
             {
-                await DisplayAlert("Flexbaze", "The password field is required.", "OK");
+                await DisplayAlert("Flexbaze", AppResources.PasswordRequired, AppResources.Accept);
                 return false;
             }
             return true;
         }
 
-        private void BtnRecover_Clicked(object sender, EventArgs e)
+        private async void BtnRecover_Clicked(object sender, EventArgs e)
         {
-            DisplayAlert("Flexbaze", "Se desea cambiar la contraseña", "OK");
+            await Navigation.PushModalAsync(new ForgotPassword());
         }
 
         private void BtnViewPass_Tapped(object sender, EventArgs e)

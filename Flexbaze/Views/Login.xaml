@@ -6,6 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:resources="clr-namespace:Flexbaze.Resources"
              xmlns:Entry="clr-namespace:Flexbaze.Models"
+             xmlns:Button="clr-namespace:Flexbaze.Models"
              mc:Ignorable="d"
              x:Class="Flexbaze.Views.Login"
              BackgroundColor="{StaticResource main}">
@@ -32,6 +33,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    
                     <StackLayout Margin="0,26,0,0" Orientation="Vertical">
                         <Label Text="{x:Static resources:AppResources.UsernamePlaceHolder}" 
                         FontSize="14"
@@ -101,16 +103,14 @@
                        TextFontSize="14"
                        FontFamily="{StaticResource Muli}"
                        BorderColor="{StaticResource bright}"/>
-                    <Button Text="{x:Static resources:AppResources.SignInButton}"
-                       Margin="0,32,0,0"
+                    <Button:NormalTextButton Text="{x:Static resources:AppResources.SignInButton}"
                        x:Name="btnSignIn"
                        Grid.Row="3"
                        FontSize="16"
-                       HeightRequest="40"
-                       CornerRadius="0"
-                       BorderWidth="0"
                        FontAttributes="Bold"
                        HorizontalOptions="Fill"
+                       HeightRequest="40"
+                       TextColor="{x:StaticResource TextMasterMenu}"
                        VerticalOptions="StartAndExpand"
                        BackgroundColor="{StaticResource bright}"
                        Clicked="BtnSignIn_Clicked"

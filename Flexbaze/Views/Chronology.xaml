@@ -5,7 +5,9 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:resources="clr-namespace:Flexbaze.Resources"
-             xmlns:Picker="clr-namespace:Flexbaze.Models" 
+             xmlns:Picker="clr-namespace:Flexbaze.Models"
+             xmlns:Button="clr-namespace:Flexbaze.Models"
+             xmlns:fonts="clr-namespace:Flexbaze.Fonts;assembly=Flexbaze"
              xmlns:Conv="clr-namespace:Flexbaze.Converters"
              mc:Ignorable="d"
              x:Class="Flexbaze.Views.Chronology">
@@ -19,10 +21,6 @@
         <StackLayout Orientation="Horizontal"
             VerticalOptions="Center"
             Spacing="10">
-            <StackLayout.GestureRecognizers>
-                <TapGestureRecognizer NumberOfTapsRequired="1"
-                    Tapped="BtnPlant_Clicked"/>
-            </StackLayout.GestureRecognizers>
             <Label
                 Text="{x:Static resources:AppResources.SupportTitle}"
                 TextColor="White"
@@ -30,18 +28,6 @@
                 FontAttributes="Bold"
                 VerticalTextAlignment="Center"
                 HorizontalOptions="CenterAndExpand"/>
-            <StackLayout Orientation="Horizontal"
-                BackgroundColor="Transparent"
-                HorizontalOptions="End">
-                <Image Source="plant.png"/>
-                <Picker:BorderlessPicker x:Name="ddlPlant"
-                    FontSize="14"
-                    TextColor="White"
-                    Margin="0,0,15,0"
-                    ItemsSource="{Binding PlantList}"
-                    SelectedItem="{Binding PlantSelected}"
-                    SelectedIndexChanged="OnPlantSelected"/>
-            </StackLayout>
         </StackLayout>
     </NavigationPage.TitleView>
     <ContentPage.Content>
@@ -54,11 +40,12 @@
                 AbsoluteLayout.LayoutBounds="1,1,1,1"
                 AbsoluteLayout.LayoutFlags="All"
                 HorizontalOptions="FillAndExpand">
-                <Button Text="{x:Static resources:AppResources.OpenLabel}"
+                <Button:NormalTextButton Text="{x:Static resources:AppResources.OpenLabel}"
                     FontSize="14"
                     x:Name="btnOpen"
                     BackgroundColor="{Binding BtnOpenColor}"
                     BorderColor="{StaticResource bright}"
+                    TextColor="{StaticResource TextMasterMenu}"
                     BorderWidth="1"
                     HeightRequest="40"
                     Visual="Material"
@@ -67,9 +54,10 @@
                     HorizontalOptions="FillAndExpand"
                     Command="{Binding CmdTickets}"
                     CommandParameter="open"/>
-                <Button Text="{x:Static resources:AppResources.InProcessLabel}"
+                <Button:NormalTextButton Text="{x:Static resources:AppResources.InProcessLabel}"
                     FontSize="14"
                     x:Name="btnInProcess"
+                    TextColor="{StaticResource TextMasterMenu}"
                     BackgroundColor="{Binding BtnInProcessColor}"
                     BorderColor="{StaticResource bright}"
                     BorderWidth="1"
@@ -78,10 +66,11 @@
                     HorizontalOptions="FillAndExpand"
                     Command="{Binding CmdTickets}"
                     CommandParameter="inProcess"/>
-                <Button Text="{x:Static resources:AppResources.ClosedLabel}"
+                <Button:NormalTextButton Text="{x:Static resources:AppResources.ClosedLabel}"
                     FontSize="14"
                     x:Name="btnDone"
                     HeightRequest="40"
+                    TextColor="{StaticResource TextMasterMenu}"
                     BackgroundColor="{Binding BtnDoneColor}"
                     BorderColor="{StaticResource bright}"
                     BorderWidth="1"
@@ -103,6 +92,7 @@
                     FontAttributes="Bold"
                     FontSize="16"
                     Margin="0,0,5,0"
+                    BackgroundColor="Transparent"
                     TextColor="White"/>
                 <DatePicker 
                     IsVisible="true"
@@ -114,8 +104,9 @@
                     FontAttributes="Bold"
                     FontSize="16"
                     Margin="5,0,5,0"
+                    BackgroundColor="Transparent"
                     TextColor="White"/>
-                <Frame BackgroundColor="{StaticResource dropDark}"
+                <Frame BackgroundColor="{StaticResource dark}"
                     HasShadow="False"
                     CornerRadius="10"
                     HorizontalOptions="FillAndExpand"
@@ -129,425 +120,480 @@
                         FontSize="14"
                         TextColor="White"
                         Margin="0,0,0,0"
-                        HorizontalOptions="Center"
-                        ItemsSource="{Binding CellList}"
-                        SelectedItem="{Binding CellSelected}"/>
+                        HorizontalOptions="Start"
+                        ItemsSource="{Binding FamilyMachineList}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding FamilyMachineSelected}"/>
                 </Frame>
             </StackLayout>
-            <ScrollView Orientation="Vertical">
-                <StackLayout Orientation="Vertical"
-                    BackgroundColor="Transparent"
-                    x:Name="HdrOpen">
-                    <StackLayout Orientation="Horizontal"
+            <StackLayout Orientation="Vertical"
+                BackgroundColor="Transparent"
+                VerticalOptions="FillAndExpand">
+                <ScrollView Orientation="Vertical">
+                    <StackLayout Orientation="Vertical"
                         BackgroundColor="Transparent"
-                        Padding="10,10,10,10"
-                        IsVisible="{Binding BtnOpenIsSelected}">
-                        <Image Source="open.png"/>
-                        <Label Text="{x:Static resources:AppResources.OpenLabel}"
-                            FontSize="14"
-                            Padding="10,5,0,0"
-                            HorizontalOptions="StartAndExpand"/>
-                        <Label Text="{Binding QtyOpen, Converter={StaticResource QtyConverter}}"
-                            FontSize="14"
-                            Padding="0,5,0,0"
-                            HorizontalOptions="EndAndExpand"/>
-                    </StackLayout>
-                    <ListView ItemTapped="OpenItemTapped_Click"
-                        SeparatorVisibility="None"
-                        SelectionMode="Single"
-                        HasUnevenRows="True"
-                        HeightRequest="{Binding HeightLvwOpen}"
-                        ItemsSource="{Binding OpenTicketList}"
-                        IsVisible="{Binding BtnOpenIsSelected}"
-                        VerticalOptions="Start">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="25"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <AbsoluteLayout Grid.Column="0">
-                                            <BoxView BackgroundColor="#336EF4"
-                                                WidthRequest="8"
-                                                HeightRequest="8"
+                        x:Name="HdrOpen">
+                        <StackLayout Orientation="Horizontal"
+                            BackgroundColor="Transparent"
+                            Padding="10,10,10,10"
+                            IsVisible="{Binding BtnOpenIsSelected}">
+                            <Image Source="open.png"/>
+                            <Label Text="{x:Static resources:AppResources.OpenLabel}"
+                                FontSize="14"
+                                Padding="10,5,0,0"
+                                HorizontalOptions="StartAndExpand"/>
+                            <Label Text="{Binding QtyOpen, Converter={StaticResource QtyConverter}}"
+                                FontSize="14"
+                                Padding="0,5,0,0"
+                                HorizontalOptions="EndAndExpand"/>
+                        </StackLayout>
+                        <ListView ItemTapped="OpenItemTapped_Click"
+                            SeparatorVisibility="None"
+                            SelectionMode="Single"
+                            HasUnevenRows="True"
+                            BackgroundColor="Transparent"
+                            HeightRequest="{Binding HeightLvwOpen}"
+                            ItemsSource="{Binding OpenTicketList}"
+                            IsVisible="{Binding BtnOpenIsSelected}"
+                            VerticalOptions="Start">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="25"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <AbsoluteLayout Grid.Column="0">
+                                                <BoxView BackgroundColor="#336EF4"
+                                                    WidthRequest="8"
+                                                    HeightRequest="8"
+                                                    CornerRadius="4"
+                                                    AbsoluteLayout.LayoutBounds="16,30,8,8"
+                                                    AbsoluteLayout.LayoutFlags="None"/>
+                                                <BoxView BackgroundColor="#336EF4"
+                                                    WidthRequest="2"
+                                                    AbsoluteLayout.LayoutBounds="{Binding Progress}"
+                                                    AbsoluteLayout.LayoutFlags="None"/>
+                                            </AbsoluteLayout>
+                                            <Frame Margin="10,5,10,5"
+                                                BackgroundColor="{StaticResource dark}"
+                                                Grid.ColumnSpan="2"
                                                 CornerRadius="4"
-                                                AbsoluteLayout.LayoutBounds="16,30,8,8"
-                                                AbsoluteLayout.LayoutFlags="None"/>
-                                            <BoxView BackgroundColor="#336EF4"
-                                                WidthRequest="2"
-                                                AbsoluteLayout.LayoutBounds="{Binding Progress}"
-                                                AbsoluteLayout.LayoutFlags="None"/>
-                                        </AbsoluteLayout>
-                                        <Frame Margin="10,5,10,5"
-                                            BackgroundColor="{StaticResource dropDark}"
-                                            Grid.ColumnSpan="2"
-                                            CornerRadius="4"
-                                            IsVisible="{Binding IsSelected, Converter={StaticResource InvConverter}}"
-                                            Grid.Column="1"
-                                            Padding="10,10,10,10">
-                                            <StackLayout Orientation="Horizontal"
-                                                BackgroundColor="Transparent">
-                                                <StackLayout Orientation="Vertical"
+                                                IsVisible="{Binding IsSelected, Converter={StaticResource InvConverter}}"
+                                                Grid.Column="1"
+                                                Padding="10,10,10,10">
+                                                <StackLayout Orientation="Horizontal"
                                                     BackgroundColor="Transparent">
-                                                    <Label Text="{Binding Description}"
-                                                        FontSize="14"
-                                                        Padding="0,0,0,0"
-                                                        HorizontalOptions="Start"/>
-                                                    <StackLayout Orientation="Horizontal"
+                                                    <StackLayout Orientation="Vertical"
                                                         BackgroundColor="Transparent">
-                                                        <Label Text="{Binding Machine}"
-                                                            FontSize="12"
-                                                            Padding="0,0,10,0"
+                                                        <Label Text="{Binding Description}"
+                                                            FontSize="14"
+                                                            Padding="0,0,0,0"
                                                             HorizontalOptions="Start"/>
-                                                        <Label Text="{Binding OEE}"
-                                                            FontSize="12"
-                                                            Padding="10,0,10,0"
-                                                            HorizontalOptions="Center"/>
-                                                        <Label Text="{Binding Hour}"
-                                                            FontSize="12"
-                                                            Padding="10,0,10,0"
-                                                            HorizontalOptions="End"/>
+                                                        <StackLayout Orientation="Horizontal"
+                                                            BackgroundColor="Transparent">
+                                                            <Label Text="{Binding Machine.Name}"
+                                                                FontSize="12"
+                                                                Padding="0,0,10,0"
+                                                                HorizontalOptions="Start"/>
+                                                            <!--<Label Text="{Binding Status}"
+                                                                FontSize="12"
+                                                                Padding="10,0,10,0"
+                                                                HorizontalOptions="Center"/>-->
+                                                            <Label Text="{Binding Hour}"
+                                                                FontSize="12"
+                                                                Padding="10,0,10,0"
+                                                                HorizontalOptions="End"/>
+                                                        </StackLayout>
                                                     </StackLayout>
+                                                    <Label Text=">"
+                                                        FontSize="12"
+                                                        Padding="10,0,0,0"
+                                                        HorizontalOptions="EndAndExpand"
+                                                        VerticalOptions="Center">
+                                                    </Label>
                                                 </StackLayout>
-                                                <Label Text=">"
-                                                    FontSize="12"
-                                                    Padding="10,0,0,0"
-                                                    HorizontalOptions="EndAndExpand"
-                                                    VerticalOptions="Center">
-                                                </Label>
-                                            </StackLayout>
-                                        </Frame>
-                                        <Frame Margin="10,5,10,5"
-                                            BackgroundColor="{StaticResource dropDark}"
-                                            Padding="10,10,10,10"
-                                            Grid.Column="1"
-                                            IsVisible="{Binding IsSelected}"
-                                            CornerRadius="4"
-                                            HorizontalOptions="Fill">
-                                            <StackLayout Orientation="Horizontal"
-                                                BackgroundColor="Transparent">
-                                                <StackLayout Orientation="Vertical"
+                                            </Frame>
+                                            <Frame Margin="10,5,10,5"
+                                                BackgroundColor="{StaticResource dark}"
+                                                Padding="10,10,10,10"
+                                                Grid.Column="1"
+                                                IsVisible="{Binding IsSelected}"
+                                                CornerRadius="4"
+                                                HorizontalOptions="Fill">
+                                                <StackLayout Orientation="Horizontal"
                                                     BackgroundColor="Transparent">
-                                                    <Label Text="{Binding Description}"
-                                                        FontSize="14"
-                                                        Padding="0,0,0,0"
-                                                        HorizontalOptions="StartAndExpand"/>
-                                                    <StackLayout Orientation="Horizontal"
-                                                        BackgroundColor="Transparent"
-                                                        HorizontalOptions="FillAndExpand">
-                                                        <Label Text="{Binding Machine}"
-                                                            FontSize="12"
-                                                            Padding="0,0,10,0"
-                                                            HorizontalOptions="Start"/>
-                                                        <Label Text="{Binding OEE}"
-                                                            FontSize="12"
-                                                            Padding="10,0,10,0"
-                                                            HorizontalOptions="Center"/>
-                                                        <Label Text="{Binding Hour}"
-                                                            FontSize="12"
-                                                            Padding="10,0,10,0"
-                                                            HorizontalOptions="End"/>
+                                                    <StackLayout Orientation="Vertical"
+                                                        BackgroundColor="Transparent">
+                                                        <Label Text="{Binding Description}"
+                                                            FontSize="14"
+                                                            Padding="0,0,0,0"
+                                                            HorizontalOptions="StartAndExpand"/>
+                                                        <StackLayout Orientation="Horizontal"
+                                                            BackgroundColor="Transparent"
+                                                            HorizontalOptions="FillAndExpand">
+                                                            <Label Text="{Binding Machine.Name}"
+                                                                FontSize="12"
+                                                                Padding="0,0,10,0"
+                                                                HorizontalOptions="Start"/>
+                                                            <Label Text="{Binding Hour}"
+                                                                FontSize="12"
+                                                                Padding="10,0,10,0"
+                                                                HorizontalOptions="End"/>
+                                                        </StackLayout>
                                                     </StackLayout>
                                                 </StackLayout>
-                                            </StackLayout>
-                                        </Frame>
-                                        <Button Text="{Binding TextButton}"
-                                            FontSize="14"
-                                            FontAttributes="Bold"
-                                            Padding="0,0,0,0"
-                                            Margin="0,0,10,0"
-                                            Grid.Column="2"
-                                            WidthRequest="114"
-                                            HeightRequest="32"
-                                            CornerRadius="4"
-                                            IsVisible="{Binding IsSelected}"
-                                            BackgroundColor="{Binding ButtonBorder}"
-                                            Command="{Binding CmdButton}"
-                                            CommandParameter="{Binding Id}"
-                                            HorizontalOptions="Center"
-                                            VerticalOptions="Center"/>
-                                    </Grid>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    <StackLayout Orientation="Horizontal"
+                                            </Frame>
+                                            <Button Text="{Binding TextButton}"
+                                                FontSize="14"
+                                                FontAttributes="Bold"
+                                                Padding="0,0,0,0"
+                                                Margin="0,0,10,0"
+                                                Grid.Column="2"
+                                                WidthRequest="114"
+                                                HeightRequest="32"
+                                                CornerRadius="4"
+                                                IsVisible="{Binding IsSelected}"
+                                                BackgroundColor="{Binding ButtonBorder}"
+                                                Command="{Binding CmdAssign}"
+                                                CommandParameter="{Binding .}"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center"/>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <StackLayout Orientation="Horizontal"
+                            BackgroundColor="Transparent"
+                            Padding="10,10,10,10"
+                            IsVisible="{Binding BtnInProcessIsSelected}">
+                            <Image Source="clock.png"/>
+                            <Label Text="{x:Static resources:AppResources.InProcessLabel}"
+                                FontSize="14"
+                                Padding="10,5,0,0"
+                                HorizontalOptions="StartAndExpand"/>
+                            <Label Text="{Binding QtyInProcess, Converter={StaticResource QtyConverter}}"
+                                FontSize="14"
+                                Padding="0,5,0,0"
+                                HorizontalOptions="EndAndExpand"/>
+                        </StackLayout>
+                        <ListView ItemTapped="InProcessItemTapped_Click"
+                            SeparatorVisibility="None"
+                            SelectionMode="Single"
+                            HasUnevenRows="True"
+                            BackgroundColor="Transparent"
+                            HeightRequest="{Binding HeightLvwInProcess}"
+                            ItemsSource="{Binding InProcessTicketList}"
+                            IsVisible="{Binding BtnInProcessIsSelected}"
+                            VerticalOptions="Start">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="25"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <AbsoluteLayout Grid.Column="0">
+                                                <BoxView BackgroundColor="#EA8800"
+                                                    WidthRequest="8"
+                                                    HeightRequest="8"
+                                                    CornerRadius="4"
+                                                    AbsoluteLayout.LayoutBounds="16,30,8,8"
+                                                    AbsoluteLayout.LayoutFlags="None"/>
+                                                <BoxView BackgroundColor="#EA8800"
+                                                    WidthRequest="2"
+                                                    AbsoluteLayout.LayoutBounds="{Binding Progress}"
+                                                    AbsoluteLayout.LayoutFlags="None"/>
+                                            </AbsoluteLayout>
+                                            <Frame Margin="10,5,10,5"
+                                                BackgroundColor="{StaticResource dark}"
+                                                Grid.ColumnSpan="2"
+                                                CornerRadius="4"
+                                                IsVisible="{Binding IsSelected, Converter={StaticResource InvConverter}}"
+                                                Grid.Column="1"
+                                                Padding="10,10,10,10">
+                                                <StackLayout Orientation="Horizontal"
+                                                    BackgroundColor="Transparent">
+                                                    <StackLayout Orientation="Vertical"
+                                                        BackgroundColor="Transparent">
+                                                        <Label Text="{Binding Description}"
+                                                            FontSize="14"
+                                                            Padding="0,0,0,0"
+                                                            HorizontalOptions="Start"/>
+                                                        <StackLayout Orientation="Horizontal"
+                                                            BackgroundColor="Transparent">
+                                                            <Label Text="{Binding Machine.Name}"
+                                                                FontSize="12"
+                                                                Padding="0,0,10,0"
+                                                                HorizontalOptions="Start"/>
+                                                            <Label Text="{Binding Hour}"
+                                                                FontSize="12"
+                                                                Padding="10,0,10,0"
+                                                                HorizontalOptions="End"/>
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                    <Label Text=">"
+                                                        FontSize="12"
+                                                        Padding="10,0,0,0"
+                                                        HorizontalOptions="EndAndExpand"
+                                                        VerticalOptions="Center">
+                                                    </Label>
+                                                </StackLayout>
+                                            </Frame>
+                                            <Frame Margin="10,5,10,5"
+                                                BackgroundColor="{StaticResource dark}"
+                                                Padding="10,10,10,10"
+                                                Grid.Column="1"
+                                                IsVisible="{Binding IsSelected}"
+                                                CornerRadius="4"
+                                                HorizontalOptions="Fill">
+                                                <StackLayout Orientation="Horizontal"
+                                                    BackgroundColor="Transparent">
+                                                    <StackLayout Orientation="Vertical"
+                                                        BackgroundColor="Transparent">
+                                                        <Label Text="{Binding Description}"
+                                                            FontSize="14"
+                                                            Padding="0,0,0,0"
+                                                            HorizontalOptions="StartAndExpand"/>
+                                                        <StackLayout Orientation="Horizontal"
+                                                            BackgroundColor="Transparent"
+                                                            HorizontalOptions="FillAndExpand">
+                                                            <Label Text="{Binding Machine.Name}"
+                                                                FontSize="12"
+                                                                Padding="0,0,10,0"
+                                                                HorizontalOptions="Start"/>
+                                                            <!--<Label Text="{Binding OEE}"
+                                                            FontSize="12"
+                                                            Padding="10,0,10,0"
+                                                            HorizontalOptions="Center"/>-->
+                                                            <Label Text="{Binding Hour}"
+                                                                FontSize="12"
+                                                                Padding="10,0,10,0"
+                                                                HorizontalOptions="End"/>
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                </StackLayout>
+                                            </Frame>
+                                            <Button Text="{Binding TextButton}"
+                                                FontSize="14"
+                                                FontAttributes="Bold"
+                                                Padding="0,0,0,0"
+                                                Margin="0,0,10,0"
+                                                Grid.Column="2"
+                                                WidthRequest="114"
+                                                HeightRequest="32"
+                                                CornerRadius="4"
+                                                IsVisible="{Binding IsSelected}"
+                                                BackgroundColor="{Binding ButtonBorder}"
+                                                Command="{Binding CmdViewDetails}"
+                                                CommandParameter="{Binding .}"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center"/>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <StackLayout Orientation="Horizontal"
+                            BackgroundColor="Transparent"
+                            Padding="10,10,10,10"
+                            IsVisible="{Binding BtnDoneIsSelected}">
+                            <Image Source="done.png"/>
+                            <Label Text="{x:Static resources:AppResources.ClosedLabel}"
+                                FontSize="14"
+                                Padding="10,5,0,0"
+                                HorizontalOptions="StartAndExpand"/>
+                            <Label Text="{Binding QtyClosed, Converter={StaticResource QtyConverter}}"
+                                FontSize="14"
+                                Padding="0,5,0,0"
+                                HorizontalOptions="EndAndExpand"/>
+                        </StackLayout>
+                        <ListView ItemTapped="ClosedItemTapped_Click"
+                            SeparatorVisibility="None"
+                            SelectionMode="Single"
+                            HasUnevenRows="True"
+                            BackgroundColor="Transparent"
+                            HeightRequest="{Binding HeightLvwClosed}"
+                            ItemsSource="{Binding ClosedTicketList}"
+                            IsVisible="{Binding BtnDoneIsSelected}"
+                            VerticalOptions="Start">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="25"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <AbsoluteLayout Grid.Column="0">
+                                                <BoxView BackgroundColor="#00A889"
+                                                    WidthRequest="8"
+                                                    HeightRequest="8"
+                                                    CornerRadius="4"
+                                                    AbsoluteLayout.LayoutBounds="16,30,8,8"
+                                                    AbsoluteLayout.LayoutFlags="None"/>
+                                                <BoxView BackgroundColor="#00A889"
+                                                    WidthRequest="2"
+                                                    AbsoluteLayout.LayoutBounds="{Binding Progress}"
+                                                    AbsoluteLayout.LayoutFlags="None"/>
+                                            </AbsoluteLayout>
+                                            <Frame Margin="10,5,10,5"
+                                                BackgroundColor="{StaticResource dark}"
+                                                Grid.ColumnSpan="2"
+                                                CornerRadius="4"
+                                                IsVisible="{Binding IsSelected, Converter={StaticResource InvConverter}}"
+                                                Grid.Column="1"
+                                                Padding="10,10,10,10">
+                                                <StackLayout Orientation="Horizontal"
+                                                    BackgroundColor="Transparent">
+                                                    <StackLayout Orientation="Vertical"
+                                                        BackgroundColor="Transparent">
+                                                        <Label Text="{Binding Description}"
+                                                            FontSize="14"
+                                                            Padding="0,0,0,0"
+                                                            HorizontalOptions="Start"/>
+                                                        <StackLayout Orientation="Horizontal"
+                                                            BackgroundColor="Transparent">
+                                                            <Label Text="{Binding Machine.Name}"
+                                                                FontSize="12"
+                                                                Padding="0,0,10,0"
+                                                                HorizontalOptions="Start"/>
+                                                            <Label Text="{Binding Hour}"
+                                                                FontSize="12"
+                                                                Padding="10,0,10,0"
+                                                                HorizontalOptions="End"/>
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                    <Label Text=">"
+                                                        FontSize="12"
+                                                        Padding="10,0,0,0"
+                                                        HorizontalOptions="EndAndExpand"
+                                                        VerticalOptions="Center">
+                                                    </Label>
+                                                </StackLayout>
+                                            </Frame>
+                                            <Frame Margin="10,5,10,5"
+                                                BackgroundColor="{StaticResource dark}"
+                                                Padding="10,10,10,10"
+                                                Grid.Column="1"
+                                                IsVisible="{Binding IsSelected}"
+                                                CornerRadius="4"
+                                                HorizontalOptions="Fill">
+                                                <StackLayout Orientation="Horizontal"
+                                                    BackgroundColor="Transparent">
+                                                    <StackLayout Orientation="Vertical"
+                                                        BackgroundColor="Transparent">
+                                                        <Label Text="{Binding Description}"
+                                                            FontSize="14"
+                                                            Padding="0,0,0,0"
+                                                            HorizontalOptions="StartAndExpand"/>
+                                                        <StackLayout Orientation="Horizontal"
+                                                            BackgroundColor="Transparent"
+                                                            HorizontalOptions="FillAndExpand">
+                                                            <Label Text="{Binding Machine.Name}"
+                                                                FontSize="12"
+                                                                Padding="0,0,10,0"
+                                                                HorizontalOptions="Start"/>
+                                                            <Label Text="{Binding Hour}"
+                                                                FontSize="12"
+                                                                Padding="10,0,10,0"
+                                                                HorizontalOptions="End"/>
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                </StackLayout>
+                                            </Frame>
+                                            <Button Text="{Binding TextButton}"
+                                                FontSize="14"
+                                                FontAttributes="Bold"
+                                                Padding="0,0,0,0"
+                                                Margin="0,0,10,0"
+                                                Grid.Column="2"
+                                                WidthRequest="114"
+                                                HeightRequest="32"
+                                                CornerRadius="4"
+                                                IsVisible="{Binding IsSelected}"
+                                                BackgroundColor="{Binding ButtonBorder}"
+                                                Command="{Binding CmdViewDetails}"
+                                                CommandParameter="{Binding .}"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center"/>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+            <Frame BackgroundColor="{StaticResource dark}"
+                   Padding="0"
+                   CornerRadius="8">
+                <StackLayout BackgroundColor="Transparent"
+                    Orientation="Horizontal"
+                    HorizontalOptions="FillAndExpand"
+                    Padding="10,0,10,20">
+                    <Button
+                        x:Name="mnuDashboard"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        ImageSource="dashboard_white.png"
+                        Clicked="MnuDashboard_Clicked"
                         BackgroundColor="Transparent"
-                        Padding="10,10,10,10"
-                        IsVisible="{Binding BtnInProcessIsSelected}">
-                        <Image Source="clock.png"/>
-                        <Label Text="{x:Static resources:AppResources.InProcessLabel}"
-                            FontSize="14"
-                            Padding="10,5,0,0"
-                            HorizontalOptions="StartAndExpand"/>
-                        <Label Text="{Binding QtyInProcess, Converter={StaticResource QtyConverter}}"
-                            FontSize="14"
-                            Padding="0,5,0,0"
-                            HorizontalOptions="EndAndExpand"/>
-                    </StackLayout>
-                    <ListView ItemTapped="InProcessItemTapped_Click"
-                        SeparatorVisibility="None"
-                        SelectionMode="Single"
-                        HasUnevenRows="True"
-                        HeightRequest="{Binding HeightLvwInProcess}"
-                        ItemsSource="{Binding InProcessTicketList}"
-                        IsVisible="{Binding BtnInProcessIsSelected}"
-                        VerticalOptions="Start">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="25"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <AbsoluteLayout Grid.Column="0">
-                                            <BoxView BackgroundColor="#EA8800"
-                                                WidthRequest="8"
-                                                HeightRequest="8"
-                                                CornerRadius="4"
-                                                AbsoluteLayout.LayoutBounds="16,30,8,8"
-                                                AbsoluteLayout.LayoutFlags="None"/>
-                                            <BoxView BackgroundColor="#EA8800"
-                                                WidthRequest="2"
-                                                AbsoluteLayout.LayoutBounds="{Binding Progress}"
-                                                AbsoluteLayout.LayoutFlags="None"/>
-                                        </AbsoluteLayout>
-                                        <Frame Margin="10,5,10,5"
-                                            BackgroundColor="{StaticResource dropDark}"
-                                            Grid.ColumnSpan="2"
-                                            CornerRadius="4"
-                                            IsVisible="{Binding IsSelected, Converter={StaticResource InvConverter}}"
-                                            Grid.Column="1"
-                                            Padding="10,10,10,10">
-                                            <StackLayout Orientation="Horizontal"
-                                                BackgroundColor="Transparent">
-                                                <StackLayout Orientation="Vertical"
-                                                    BackgroundColor="Transparent">
-                                                    <Label Text="{Binding Description}"
-                                                        FontSize="14"
-                                                        Padding="0,0,0,0"
-                                                        HorizontalOptions="Start"/>
-                                                    <StackLayout Orientation="Horizontal"
-                                                        BackgroundColor="Transparent">
-                                                        <Label Text="{Binding Machine}"
-                                                            FontSize="12"
-                                                            Padding="0,0,10,0"
-                                                            HorizontalOptions="Start"/>
-                                                        <Label Text="{Binding OEE}"
-                                                            FontSize="12"
-                                                            Padding="10,0,10,0"
-                                                            HorizontalOptions="Center"/>
-                                                        <Label Text="{Binding Hour}"
-                                                            FontSize="12"
-                                                            Padding="10,0,10,0"
-                                                            HorizontalOptions="End"/>
-                                                    </StackLayout>
-                                                </StackLayout>
-                                                <Label Text=">"
-                                                    FontSize="12"
-                                                    Padding="10,0,0,0"
-                                                    HorizontalOptions="EndAndExpand"
-                                                    VerticalOptions="Center">
-                                                </Label>
-                                            </StackLayout>
-                                        </Frame>
-                                        <Frame Margin="10,5,10,5"
-                                            BackgroundColor="{StaticResource dropDark}"
-                                            Padding="10,10,10,10"
-                                            Grid.Column="1"
-                                            IsVisible="{Binding IsSelected}"
-                                            CornerRadius="4"
-                                            HorizontalOptions="Fill">
-                                            <StackLayout Orientation="Horizontal"
-                                                BackgroundColor="Transparent">
-                                                <StackLayout Orientation="Vertical"
-                                                    BackgroundColor="Transparent">
-                                                    <Label Text="{Binding Description}"
-                                                        FontSize="14"
-                                                        Padding="0,0,0,0"
-                                                        HorizontalOptions="StartAndExpand"/>
-                                                    <StackLayout Orientation="Horizontal"
-                                                        BackgroundColor="Transparent"
-                                                        HorizontalOptions="FillAndExpand">
-                                                        <Label Text="{Binding Machine}"
-                                                            FontSize="12"
-                                                            Padding="0,0,10,0"
-                                                            HorizontalOptions="Start"/>
-                                                        <Label Text="{Binding OEE}"
-                                                            FontSize="12"
-                                                            Padding="10,0,10,0"
-                                                            HorizontalOptions="Center"/>
-                                                        <Label Text="{Binding Hour}"
-                                                            FontSize="12"
-                                                            Padding="10,0,10,0"
-                                                            HorizontalOptions="End"/>
-                                                    </StackLayout>
-                                                </StackLayout>
-                                            </StackLayout>
-                                        </Frame>
-                                        <Button Text="{Binding TextButton}"
-                                            FontSize="14"
-                                            FontAttributes="Bold"
-                                            Padding="0,0,0,0"
-                                            Margin="0,0,10,0"
-                                            Grid.Column="2"
-                                            WidthRequest="114"
-                                            HeightRequest="32"
-                                            CornerRadius="4"
-                                            IsVisible="{Binding IsSelected}"
-                                            BackgroundColor="{Binding ButtonBorder}"
-                                            Command="{Binding CmdButton}"
-                                            CommandParameter="{Binding Id}"
-                                            HorizontalOptions="Center"
-                                            VerticalOptions="Center"/>
-                                    </Grid>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    <StackLayout Orientation="Horizontal"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,5,5,5"/>
+                    <Button 
+                        x:Name="mnuSupport"
+                        Text="{x:Static fonts:IconFont.Support}"
+                        Clicked="MnuSupport_Clicked"
+                        FontSize="15"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        FontFamily="fontello"
+                        TextColor="{StaticResource bright}"
                         BackgroundColor="Transparent"
-                        Padding="10,10,10,10"
-                        IsVisible="{Binding BtnDoneIsSelected}">
-                        <Image Source="done.png"/>
-                        <Label Text="{x:Static resources:AppResources.ClosedLabel}"
-                            FontSize="14"
-                            Padding="10,5,0,0"
-                            HorizontalOptions="StartAndExpand"/>
-                        <Label Text="{Binding QtyClosed, Converter={StaticResource QtyConverter}}"
-                            FontSize="14"
-                            Padding="0,5,0,0"
-                            HorizontalOptions="EndAndExpand"/>
-                    </StackLayout>
-                    <ListView ItemTapped="ClosedItemTapped_Click"
-                        SeparatorVisibility="None"
-                        SelectionMode="Single"
-                        HasUnevenRows="True"
-                        HeightRequest="{Binding HeightLvwClosed}"
-                        ItemsSource="{Binding ClosedTicketList}"
-                        IsVisible="{Binding BtnDoneIsSelected}"
-                        VerticalOptions="Start">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="25"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <AbsoluteLayout Grid.Column="0">
-                                            <BoxView BackgroundColor="#00A889"
-                                                WidthRequest="8"
-                                                HeightRequest="8"
-                                                CornerRadius="4"
-                                                AbsoluteLayout.LayoutBounds="16,30,8,8"
-                                                AbsoluteLayout.LayoutFlags="None"/>
-                                            <BoxView BackgroundColor="#00A889"
-                                                WidthRequest="2"
-                                                AbsoluteLayout.LayoutBounds="{Binding Progress}"
-                                                AbsoluteLayout.LayoutFlags="None"/>
-                                        </AbsoluteLayout>
-                                        <Frame Margin="10,5,10,5"
-                                            BackgroundColor="{StaticResource dropDark}"
-                                            Grid.ColumnSpan="2"
-                                            CornerRadius="4"
-                                            IsVisible="{Binding IsSelected, Converter={StaticResource InvConverter}}"
-                                            Grid.Column="1"
-                                            Padding="10,10,10,10">
-                                            <StackLayout Orientation="Horizontal"
-                                                BackgroundColor="Transparent">
-                                                <StackLayout Orientation="Vertical"
-                                                    BackgroundColor="Transparent">
-                                                    <Label Text="{Binding Description}"
-                                                        FontSize="14"
-                                                        Padding="0,0,0,0"
-                                                        HorizontalOptions="Start"/>
-                                                    <StackLayout Orientation="Horizontal"
-                                                        BackgroundColor="Transparent">
-                                                        <Label Text="{Binding Machine}"
-                                                            FontSize="12"
-                                                            Padding="0,0,10,0"
-                                                            HorizontalOptions="Start"/>
-                                                        <Label Text="{Binding OEE}"
-                                                            FontSize="12"
-                                                            Padding="10,0,10,0"
-                                                            HorizontalOptions="Center"/>
-                                                        <Label Text="{Binding Hour}"
-                                                            FontSize="12"
-                                                            Padding="10,0,10,0"
-                                                            HorizontalOptions="End"/>
-                                                    </StackLayout>
-                                                </StackLayout>
-                                                <Label Text=">"
-                                                    FontSize="12"
-                                                    Padding="10,0,0,0"
-                                                    HorizontalOptions="EndAndExpand"
-                                                    VerticalOptions="Center">
-                                                </Label>
-                                            </StackLayout>
-                                        </Frame>
-                                        <Frame Margin="10,5,10,5"
-                                            BackgroundColor="{StaticResource dropDark}"
-                                            Padding="10,10,10,10"
-                                            Grid.Column="1"
-                                            IsVisible="{Binding IsSelected}"
-                                            CornerRadius="4"
-                                            HorizontalOptions="Fill">
-                                            <StackLayout Orientation="Horizontal"
-                                                BackgroundColor="Transparent">
-                                                <StackLayout Orientation="Vertical"
-                                                    BackgroundColor="Transparent">
-                                                    <Label Text="{Binding Description}"
-                                                        FontSize="14"
-                                                        Padding="0,0,0,0"
-                                                        HorizontalOptions="StartAndExpand"/>
-                                                    <StackLayout Orientation="Horizontal"
-                                                        BackgroundColor="Transparent"
-                                                        HorizontalOptions="FillAndExpand">
-                                                        <Label Text="{Binding Machine}"
-                                                            FontSize="12"
-                                                            Padding="0,0,10,0"
-                                                            HorizontalOptions="Start"/>
-                                                        <Label Text="{Binding OEE}"
-                                                            FontSize="12"
-                                                            Padding="10,0,10,0"
-                                                            HorizontalOptions="Center"/>
-                                                        <Label Text="{Binding Hour}"
-                                                            FontSize="12"
-                                                            Padding="10,0,10,0"
-                                                            HorizontalOptions="End"/>
-                                                    </StackLayout>
-                                                </StackLayout>
-                                            </StackLayout>
-                                        </Frame>
-                                        <Button Text="{Binding TextButton}"
-                                            FontSize="14"
-                                            FontAttributes="Bold"
-                                            Padding="0,0,0,0"
-                                            Margin="0,0,10,0"
-                                            Grid.Column="2"
-                                            WidthRequest="114"
-                                            HeightRequest="32"
-                                            CornerRadius="4"
-                                            IsVisible="{Binding IsSelected}"
-                                            BackgroundColor="{Binding ButtonBorder}"
-                                            Command="{Binding CmdButton}"
-                                            CommandParameter="{Binding Id}"
-                                            HorizontalOptions="Center"
-                                            VerticalOptions="Center" />
-                                    </Grid>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,5,5,5"/>
+                    <Button 
+                        x:Name="mnuOEE"
+                        Text="{x:Static fonts:IconFont.ThList}"
+                        Clicked="MnuOEE_Clicked"
+                        FontSize="17"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        FontFamily="fontello"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,5,5,5"/>
+                    <Button 
+                        x:Name="mnuNotification"
+                        Text="{x:Static fonts:IconFont.Notifications}"
+                        Clicked="MnuNotification_Clicked"
+                        FontSize="17"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        FontFamily="fontello"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,0,5,0"/>
+                    <Button 
+                        x:Name="mnuProfile"
+                        Clicked="MnuProfile_Clicked"
+                        ImageSource="user_white.png"
+                        WidthRequest="60"
+                        HeightRequest="48"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand"
+                        Padding="5,5,5,5"/>
                 </StackLayout>
-            </ScrollView>
+            </Frame>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

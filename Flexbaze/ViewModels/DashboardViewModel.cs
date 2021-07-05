@@ -10,42 +10,50 @@ using Cell = Flexbaze.Models.Cell;
 using System.Collections.ObjectModel;
 using Flexbaze.Resources;
 using Flexbaze.Views;
+using Flexbaze.ViewModels.Base;
 
 namespace Flexbaze.ViewModels
 {
-    class DashboardViewModel : INotifyPropertyChanged
+    class DashboardViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private Request _request = new Request();
-        private List<ChartEntry> _entryList;
-        private List<ChartEntry> _entryCausesList;
+        public enum Planning
+        {
+            Today,
+            Week,
+            Month
+        }
+        private ObservableCollection<ChartEntry> _entryList;
+        private ObservableCollection<ChartEntry> _entryScrapList;
         private ObservableCollection<Cell> _cellList;
         private ObservableCollection<Stoppage> _stopList;
         private ObservableCollection<Scrap> _scrapList;
-        private ObservableCollection<Ticket> _openTicketList;
-        private ObservableCollection<Ticket> _inProcessTicketList;
-        private ObservableCollection<Ticket> _closedTicketList;
-        private List<Ticket> _filterTicketList;
-        private List<string> _plantList;
-        private string _plantSelected;
+        private ObservableCollection<TicketComplete> _openTicketList;
+        private ObservableCollection<TicketComplete> _inProcessTicketList;
+        private ObservableCollection<TicketComplete> _closedTicketList;
+        private List<TicketComplete> _filterTicketList;
+        private List<FactoryType> _plantList;
+        private FactoryType _plantSelected;
         private double _heightListViewOEE;
         private double _heightListViewOpen;
         private double _heightListViewInProcess;
         private double _heightListViewClosed;
+        private double _heightScrapChart;
+        private double _heightScrapList;
+        private double _heightEntryChart;
+        private double _heightEntryList;
         private string _orderName;
         private string _orderProgress;
         private string _orderOEE;
         private string _orderMetrics;
+        private string _bestTeamLeaderCell;
         private int _accidents;
         private int _incidents;
         private bool _showAccidents;
-        private string _bestTeamLeaderCell;
-        private string _oeePlantHdr;
         public Command CmdOrder { get; private set; }
-        public Command CmdAssign { get; private set; }
-        public Command CmdViewDetails { get; private set; }
         public event PropertyChangedEventHandler PropertyChanged;
+        public INavigationHandler NavigationHandler { private get; set; }
 
-        public List<ChartEntry> EntryList
+        public ObservableCollection<ChartEntry> EntryList
         {
             get => _entryList;
             private set
@@ -55,12 +63,12 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public List<ChartEntry> EntryCausesList
+        public ObservableCollection<ChartEntry> EntryScrapList
         {
-            get => _entryCausesList;
+            get => _entryScrapList;
             private set
             {
-                _entryCausesList = value;
+                _entryScrapList = value;
                 OnPropertyChanged();
             }
         }
@@ -95,7 +103,7 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public ObservableCollection<Ticket> OpenTicketList
+        public ObservableCollection<TicketComplete> OpenTicketList
         {
             get => _openTicketList;
             private set
@@ -105,7 +113,7 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public ObservableCollection<Ticket> InProcessTicketList
+        public ObservableCollection<TicketComplete> InProcessTicketList
         {
             get => _inProcessTicketList;
             private set
@@ -115,7 +123,7 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public ObservableCollection<Ticket> ClosedTicketList
+        public ObservableCollection<TicketComplete> ClosedTicketList
         {
             get => _closedTicketList;
             private set
@@ -125,7 +133,7 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public List<string> PlantList
+        public List<FactoryType> PlantList
         {
             get => _plantList;
             private set
@@ -135,7 +143,7 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public List<Ticket> FilterTicketList
+        public List<TicketComplete> FilterTicketList
         {
             get => _filterTicketList;
             private set
@@ -151,6 +159,46 @@ namespace Flexbaze.ViewModels
             private set
             {
                 _heightListViewOEE = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double HeightScrapChart
+        {
+            get => _heightScrapChart;
+            private set
+            {
+                _heightScrapChart = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double HeightScrapList
+        {
+            get => _heightScrapList;
+            private set
+            {
+                _heightScrapList = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double HeightEntryChart
+        {
+            get => _heightEntryChart;
+            private set
+            {
+                _heightEntryChart = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double HeightEntryList
+        {
+            get => _heightEntryList;
+            private set
+            {
+                _heightEntryList = value;
                 OnPropertyChanged();
             }
         }
@@ -185,7 +233,7 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public string PlantSelected
+        public FactoryType PlantSelected
         {
             get => _plantSelected;
             private set
@@ -204,6 +252,7 @@ namespace Flexbaze.ViewModels
                 OnPropertyChanged();
             }
         }
+
         public string OrderProgress
         {
             get => _orderProgress;
@@ -230,6 +279,16 @@ namespace Flexbaze.ViewModels
             private set
             {
                 _orderMetrics = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string BestTeamLeaderCell
+        {
+            get => _bestTeamLeaderCell;
+            private set
+            {
+                _bestTeamLeaderCell = value;
                 OnPropertyChanged();
             }
         }
@@ -264,157 +323,27 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public string BestTeamLeaderCell
+        public DashboardViewModel(INavigationHandler _NavigationHandler) : base()
         {
-            get => _bestTeamLeaderCell;
-            private set
-            {
-                _bestTeamLeaderCell = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string OEEPlantHdr
-        {
-            get => _oeePlantHdr;
-            private set
-            {
-                _oeePlantHdr = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public DashboardViewModel()
-        {
+            NavigationHandler = _NavigationHandler;
             Ini();
         }
 
         private void Ini()
         {
+            showIndicator();
+            LoadEntries(Planning.Today);
+            LoadScrap(Planning.Today);
+            LoadOEEUpToDown();
+            LoadTickets();
             LoadDropDown();
-            GetData("M1", "Today");
-        }
-
-        public void GetData(string plant, string period)
-        {
-            GetAccidents(plant, period);
-            LoadEntries(plant, period);
-            LoadScrap(plant, period);
-            LoadOEEUpToDown(plant, period);
-            LoadTickets(plant, period);
-            GetBestTeamLeaderCell(plant, period);
-            OEEPlantHdr = "OEE " + AppResources.PlantLabel + " " + plant;
+            Accidents = 0;
+            Incidents = 0;
             if (Accidents == 0 && Incidents == 0)
                 ShowAccidents = false;
             else
                 ShowAccidents = true;
-        }
-
-        private void GetBestTeamLeaderCell(string plant, string period)
-        {
-            switch(plant)
-            {
-                case "M1":
-                    switch (period)
-                    {
-                        case "Today":
-                            BestTeamLeaderCell = AppResources.CellLabel + " 1";
-                            break;
-                        case "Week":
-                            BestTeamLeaderCell = AppResources.CellLabel + " 4";
-                            break;
-                        case "Month":
-                            BestTeamLeaderCell = AppResources.CellLabel + " 7";
-                            break;
-                    }
-                    break;
-                case "M2":
-                    switch (period)
-                    {
-                        case "Today":
-                            BestTeamLeaderCell = AppResources.CellLabel + " 2";
-                            break;
-                        case "Week":
-                            BestTeamLeaderCell = AppResources.CellLabel + " 5";
-                            break;
-                        case "Month":
-                            BestTeamLeaderCell = AppResources.CellLabel + " 8";
-                            break;
-                    }
-                    break;
-                case "M3":
-                    switch (period)
-                    {
-                        case "Today":
-                            BestTeamLeaderCell = AppResources.CellLabel + " 3";
-                            break;
-                        case "Week":
-                            BestTeamLeaderCell = AppResources.CellLabel + " 6";
-                            break;
-                        case "Month":
-                            BestTeamLeaderCell = AppResources.CellLabel + " 9";
-                            break;
-                    }
-                    break;
-            }
-        }
-
-        public void GetAccidents(string plant, string period)
-        {
-            switch (plant)
-            {
-                case "M1":
-                    switch (period)
-                    {
-                        case "Today":
-                            Accidents = 1;
-                            Incidents = 0;
-                            break;
-                        case "Week":
-                            Accidents = 2;
-                            Incidents = 1;
-                            break;
-                        case "Month":
-                            Accidents = 0;
-                            Incidents = 1;
-                            break;
-                    }
-                    break;
-                case "M2":
-                    switch (period)
-                    {
-                        case "Today":
-                            Accidents = 0;
-                            Incidents = 0;
-                            break;
-                        case "Week":
-                            Accidents = 1;
-                            Incidents = 1;
-                            break;
-                        case "Month":
-                            Accidents = 3;
-                            Incidents = 1;
-                            break;
-                    }
-                    break;
-                case "M3":
-                    switch (period)
-                    {
-                        case "Today":
-                            Accidents = 4;
-                            Incidents = 2;
-                            break;
-                        case "Week":
-                            Accidents = 0;
-                            Incidents = 3;
-                            break;
-                        case "Month":
-                            Accidents = 0;
-                            Incidents = 0;
-                            break;
-                    }
-                    break;
-            }
+            closeIndicator();
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = "")
@@ -422,339 +351,334 @@ namespace Flexbaze.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private void LoadEntries(string plant, string period)
+        public void LoadEntries(Planning planning)
         {
-            EntryList = new List<ChartEntry>();
-            EntryCausesList = new List<ChartEntry>();
+            EntryList = new ObservableCollection<ChartEntry>();
             StopList = new ObservableCollection<Stoppage>();
-            Stoppage stop1 = new Stoppage()
+            StopsStats stops = GetStops();
+            List<StopsCountStats> stopsCountStats = new List<StopsCountStats>();
+            switch (planning)
             {
-                ColorLabel = Color.FromHex("#2BB9F1"),
-                Name = AppResources.RawMaterial,
-                Percentage = "25%"
-            };
-            ChartEntry ent1 = new ChartEntry(25)
-            {
-                Label = " ",
-                ValueLabel = "25%",
-                ValueLabelColor = SKColors.White,
-                Color = SKColor.Parse("#2BB9F1"),
-                TextColor = SKColors.White
-            };
-            Stoppage stop2 = new Stoppage()
-            {
-                ColorLabel = Color.FromHex("#A509D0"),
-                Name = "Setup CM",
-                Percentage = "12%"
-            };
-            ChartEntry ent2 = new ChartEntry(12)
-            {
-                Label = " ",
-                ValueLabel = "12%",
-                ValueLabelColor = SKColors.White,
-                Color = SKColor.Parse("#A509D0"),
-                TextColor = SKColors.White
-            };
-            Stoppage stop3 = new Stoppage()
-            {
-                ColorLabel = Color.FromHex("#E26716"),
-                Name = AppResources.LackMold,
-                Percentage = "10%"
-            };
-            ChartEntry ent3 = new ChartEntry(10)
-            {
-                Label = " ",
-                ValueLabel = "10%",
-                ValueLabelColor = SKColors.White,
-                Color = SKColor.Parse("#E26716"),
-                TextColor = SKColors.White
-            };
-            Stoppage stop4 = new Stoppage()
-            {
-                ColorLabel = Color.FromHex("#5228EA"),
-                Name = AppResources.MoldRoutine,
-                Percentage = "9%"
-            };
-            ChartEntry ent4 = new ChartEntry(9)
-            {
-                Label = " ",
-                ValueLabel = "9%",
-                ValueLabelColor = SKColors.White,
-                Color = SKColor.Parse("#5228EA"),
-                TextColor = SKColors.White
-            };
-            Stoppage stop5 = new Stoppage()
-            {
-                ColorLabel = Color.FromHex("#71BD4E"),
-                Name = AppResources.PackedLabel,
-                Percentage = "6%"
-            };
-            ChartEntry ent5 = new ChartEntry(6)
-            {
-                Label = " ",
-                ValueLabel = "6%",
-                ValueLabelColor = SKColors.White,
-                Color = SKColor.Parse("#71BD4E"),
-                TextColor = SKColors.White
-            };
-            ChartEntry ent6 = new ChartEntry(28)
-            {
-                Label = " ",
-                ValueLabel = "28%",
-                ValueLabelColor = SKColors.White,
-                Color = SKColor.Parse("#2BB9F1"),
-                TextColor = SKColors.White
-            };
-            ChartEntry ent7 = new ChartEntry(22)
-            {
-                Label = " ",
-                ValueLabel = "22%",
-                ValueLabelColor = SKColors.White,
-                Color = SKColor.Parse("#A509D0"),
-                TextColor = SKColors.White
-            };
-            ChartEntry ent8 = new ChartEntry(17)
-            {
-                Label = " ",
-                ValueLabel = "17%",
-                ValueLabelColor = SKColors.White,
-                Color = SKColor.Parse("#E26716"),
-                TextColor = SKColors.White
-            };
-            ChartEntry ent9 = new ChartEntry(33)
-            {
-                Label = " ",
-                ValueLabel = "33%",
-                ValueLabelColor = SKColors.White,
-                Color = SKColor.Parse("#5228EA"),
-                TextColor = SKColors.White
-            };
-            switch (plant)
-            {
-                case "M1":
-                    switch (period)
-                    {
-                        case "Today":
-                            EntryList.Add(ent1);
-                            EntryList.Add(ent4);
-                            EntryCausesList.Add(ent6);
-                            EntryCausesList.Add(ent8);
-                            StopList.Add(stop1);
-                            StopList.Add(stop3);
-                            break;
-                        case "Week":
-                            EntryList.Add(ent1);
-                            EntryList.Add(ent2);
-                            EntryList.Add(ent4);
-                            EntryCausesList.Add(ent6);
-                            EntryCausesList.Add(ent7);
-                            EntryCausesList.Add(ent8);
-                            StopList.Add(stop1);
-                            StopList.Add(stop2);
-                            StopList.Add(stop3);
-                            break;
-                        case "Month":
-                            EntryList.Add(ent1);
-                            EntryList.Add(ent2);
-                            EntryList.Add(ent3);
-                            EntryList.Add(ent4);
-                            EntryList.Add(ent5);
-                            EntryCausesList.Add(ent6);
-                            EntryCausesList.Add(ent7);
-                            EntryCausesList.Add(ent8);
-                            EntryCausesList.Add(ent9);
-                            StopList.Add(stop1);
-                            StopList.Add(stop2);
-                            StopList.Add(stop3);
-                            StopList.Add(stop4);
-                            StopList.Add(stop5);
-                            break;
-                    }
+                case Planning.Today:
+                    stopsCountStats = stops.Today;
                     break;
-                case "M2":
-                    switch (period)
-                    {
-                        case "Today":
-                            EntryList.Add(ent2);
-                            EntryList.Add(ent3);
-                            EntryCausesList.Add(ent8);
-                            EntryCausesList.Add(ent7);
-                            StopList.Add(stop2);
-                            StopList.Add(stop4);
-                            break;
-                        case "Week":
-                            EntryList.Add(ent2);
-                            EntryList.Add(ent3);
-                            EntryList.Add(ent5);
-                            EntryCausesList.Add(ent8);
-                            EntryCausesList.Add(ent7);
-                            EntryCausesList.Add(ent9);
-                            StopList.Add(stop2);
-                            StopList.Add(stop4);
-                            StopList.Add(stop5);
-                            break;
-                        case "Month":
-                            EntryList.Add(ent2);
-                            EntryList.Add(ent3);
-                            EntryList.Add(ent5);
-                            EntryList.Add(ent4);
-                            EntryList.Add(ent1);
-                            EntryCausesList.Add(ent8);
-                            EntryCausesList.Add(ent7);
-                            EntryCausesList.Add(ent9);
-                            EntryCausesList.Add(ent6);
-                            StopList.Add(stop2);
-                            StopList.Add(stop4);
-                            StopList.Add(stop5);
-                            StopList.Add(stop1);
-                            StopList.Add(stop3);
-                            break;
-                    }
+                case Planning.Week:
+                    stopsCountStats = stops.Week;
                     break;
-                case "M3":
-                    switch (period)
-                    {
-                        case "Today":
-                            EntryList.Add(ent5);
-                            EntryList.Add(ent1);
-                            EntryCausesList.Add(ent9);
-                            EntryCausesList.Add(ent6);
-                            StopList.Add(stop5);
-                            StopList.Add(stop1);
-                            break;
-                        case "Week":
-                            EntryList.Add(ent5);
-                            EntryList.Add(ent1);
-                            EntryList.Add(ent4);
-                            EntryCausesList.Add(ent9);
-                            EntryCausesList.Add(ent6);
-                            EntryCausesList.Add(ent8);
-                            StopList.Add(stop5);
-                            StopList.Add(stop1);
-                            StopList.Add(stop3);
-                            break;
-                        case "Month":
-                            EntryList.Add(ent5);
-                            EntryList.Add(ent1);
-                            EntryList.Add(ent4);
-                            EntryList.Add(ent3);
-                            EntryList.Add(ent2);
-                            EntryCausesList.Add(ent9);
-                            EntryCausesList.Add(ent6);
-                            EntryCausesList.Add(ent8);
-                            EntryCausesList.Add(ent7);
-                            StopList.Add(stop5);
-                            StopList.Add(stop1);
-                            StopList.Add(stop3);
-                            StopList.Add(stop2);
-                            StopList.Add(stop4);
-                            break;
-                    }
+                case Planning.Month:
+                    stopsCountStats = stops.Month;
                     break;
             }
+            int qtyTotal = 0;
+
+            for (int i = 0; i < stopsCountStats.Count; i++)
+            {
+                Stoppage stop1 = new Stoppage() { Name = stopsCountStats[i].Description };
+                qtyTotal += stopsCountStats[i].Count;
+                switch (i)
+                {
+                    case 0:
+                        stop1.ColorLabel = Color.FromHex("#2BB9f1");
+                        break;
+                    case 1:
+                        stop1.ColorLabel = Color.FromHex("#A509D0");
+                        break;
+                    case 2:
+                        stop1.ColorLabel = Color.FromHex("#E26716");
+                        break;
+                    case 3:
+                        stop1.ColorLabel = Color.FromHex("#5228EA");
+                        break;
+                    case 4:
+                        stop1.ColorLabel = Color.FromHex("#71BD4E");
+                        break;
+                }
+                StopList.Add(stop1);
+            }
+
+            for (int j = 0; j < StopList.Count; j++)
+            {
+                if (qtyTotal > 0)
+                {
+                    StopList[j].Percentage = (stopsCountStats[j].Count * 100 / qtyTotal).ToString();
+                }
+
+                ChartEntry ent1 = new ChartEntry(float.Parse(StopList[j].Percentage ?? "0"))
+                {
+                    Color = SKColor.Parse(StopList[j].ColorLabel.ToHex()),
+                    TextColor = SKColor.Parse("#FFFFFF"),
+                    ValueLabelColor = SKColor.Parse("#FFFFFF"),
+                    Label = " ",
+                    ValueLabel = (StopList[j].Percentage ?? "0") + "%"
+                };
+                EntryList.Add(ent1);
+            }
+
+            HeightEntryChart = EntryList.Count * 50;
+            HeightEntryList = StopList.Count > 2 ? (StopList.Count * 55) : StopList.Count > 0 ? 160 : 0;
         }
 
-        private void LoadScrap(string plant, string period)
+        private StopsStats GetStops()
         {
+            StopsStats ss = new StopsStats();
+            ss.Today = new List<StopsCountStats>()
+            {
+                new StopsCountStats()
+                {
+                    Count = 2,
+                    Description = AppResources.SamplingLabel
+                },
+                new StopsCountStats()
+                {
+                    Count = 4,
+                    Description = "Setup CM"
+                },
+                new StopsCountStats()
+                {
+                    Count = 3,
+                    Description = AppResources.LackMold
+                },
+                new StopsCountStats()
+                {
+                    Count = 1,
+                    Description = AppResources.MoldRoutine
+                },
+                new StopsCountStats()
+                {
+                    Count = 4,
+                    Description = AppResources.PackedLabel
+                },
+            };
+            ss.Week = new List<StopsCountStats>()
+            {
+                new StopsCountStats()
+                {
+                    Count = 4,
+                    Description = AppResources.SamplingLabel
+                },
+                new StopsCountStats()
+                {
+                    Count = 6,
+                    Description = "Setup CM"
+                },
+                new StopsCountStats()
+                {
+                    Count = 5,
+                    Description = AppResources.LackMold
+                },
+                new StopsCountStats()
+                {
+                    Count = 3,
+                    Description = AppResources.MoldRoutine
+                },
+                new StopsCountStats()
+                {
+                    Count = 6,
+                    Description = AppResources.PackedLabel
+                },
+            };
+            ss.Month = new List<StopsCountStats>()
+            {
+                new StopsCountStats()
+                {
+                    Count = 7,
+                    Description = AppResources.SamplingLabel
+                },
+                new StopsCountStats()
+                {
+                    Count = 10,
+                    Description = "Setup CM"
+                },
+                new StopsCountStats()
+                {
+                    Count = 8,
+                    Description = AppResources.LackMold
+                },
+                new StopsCountStats()
+                {
+                    Count = 6,
+                    Description = AppResources.MoldRoutine
+                },
+                new StopsCountStats()
+                {
+                    Count = 11,
+                    Description = AppResources.PackedLabel
+                },
+            };
+            return ss;
+        }
+
+        public void LoadScrap(Planning planning)
+        {
+            EntryScrapList = new ObservableCollection<ChartEntry>();
             ScrapList = new ObservableCollection<Scrap>();
-            Scrap scrap1 = new Scrap()
+            int qtyTotal = 0;
+            ScrapStats scraps = GetScraps();
+
+            List<ScrapCountStats> scrapCountStats = new List<ScrapCountStats>();
+            switch (planning)
             {
-                ColorLabel = Color.FromHex("#2BB9F1"),
-                Name = AppResources.MilkyPiece,
-                Percentage = "28%"
-            };
-            Scrap scrap2 = new Scrap()
-            {
-                ColorLabel = Color.FromHex("#A509D0"),
-                Name = AppResources.MeasuresNotAllowed,
-                Percentage = "22%"
-            };
-            Scrap scrap3 = new Scrap()
-            {
-                ColorLabel = Color.FromHex("#E26716"),
-                Name = AppResources.BrokenPiece,
-                Percentage = "17%"
-            };
-            Scrap scrap4 = new Scrap()
-            {
-                ColorLabel = Color.FromHex("#5228EA"),
-                Name = AppResources.PigmentNeeded,
-                Percentage = "33%"
-            };
-            switch (plant)
-            {
-                case "M1":
-                    switch (period)
-                    {
-                        case "Today":
-                            ScrapList.Add(scrap1);
-                            ScrapList.Add(scrap2);
-                            break;
-                        case "Week":
-                            ScrapList.Add(scrap1);
-                            ScrapList.Add(scrap2);
-                            ScrapList.Add(scrap3);
-                            break;
-                        case "Month":
-                            ScrapList.Add(scrap1);
-                            ScrapList.Add(scrap2);
-                            ScrapList.Add(scrap3);
-                            ScrapList.Add(scrap4);
-                            break;
-                    }
+                case Planning.Today:
+                    scrapCountStats = scraps.Today;
                     break;
-                case "M2":
-                    switch (period)
-                    {
-                        case "Today":
-                            ScrapList.Add(scrap2);
-                            ScrapList.Add(scrap3);
-                            break;
-                        case "Week":
-                            ScrapList.Add(scrap2);
-                            ScrapList.Add(scrap3);
-                            ScrapList.Add(scrap4);
-                            break;
-                        case "Month":
-                            ScrapList.Add(scrap2);
-                            ScrapList.Add(scrap3);
-                            ScrapList.Add(scrap4);
-                            ScrapList.Add(scrap1);
-                            break;
-                    }
+                case Planning.Week:
+                    scrapCountStats = scraps.Week;
                     break;
-                case "M3":
-                    switch (period)
-                    {
-                        case "Today":
-                            ScrapList.Add(scrap3);
-                            ScrapList.Add(scrap4);
-                            break;
-                        case "Week":
-                            ScrapList.Add(scrap3);
-                            ScrapList.Add(scrap4);
-                            ScrapList.Add(scrap2);
-                            break;
-                        case "Month":
-                            ScrapList.Add(scrap3);
-                            ScrapList.Add(scrap4);
-                            ScrapList.Add(scrap2);
-                            ScrapList.Add(scrap1);
-                            break;
-                    }
+                case Planning.Month:
+                    scrapCountStats = scraps.Month;
                     break;
             }
+
+            for (int i = 0; i < scrapCountStats.Count; i++)
+            {
+                if (i < 5)
+                {
+                    Scrap scrap1 = new Scrap() { Name = scrapCountStats[i].Description };
+                    qtyTotal += scrapCountStats[i].Count;
+                    switch (i)
+                    {
+                        case 0:
+                            scrap1.ColorLabel = Color.FromHex("#2BB9F1");
+                            break;
+                        case 1:
+                            scrap1.ColorLabel = Color.FromHex("#A509D0");
+                            break;
+                        case 2:
+                            scrap1.ColorLabel = Color.FromHex("#E26716");
+                            break;
+                        case 3:
+                            scrap1.ColorLabel = Color.FromHex("#5228EA");
+                            break;
+                        case 4:
+                            scrap1.ColorLabel = Color.FromHex("#71BD4E");
+                            break;
+                    }
+                    ScrapList.Add(scrap1);
+                }
+            }
+
+            for (int j = 0; j < ScrapList.Count; j++)
+            {
+                if (qtyTotal > 0)
+                {
+                    ScrapList[j].Percentage = (scrapCountStats[j].Count * 100 / qtyTotal).ToString();
+                }
+
+                ChartEntry ent2 = new ChartEntry(float.Parse(ScrapList[j].Percentage ?? "0"))
+                {
+                    Color = SKColor.Parse(ScrapList[j].ColorLabel.ToHex()),
+                    TextColor = SKColor.Parse("#FFFFFF"),
+                    ValueLabelColor = SKColor.Parse("#FFFFFF"),
+                    Label = " ",
+                    ValueLabel = (ScrapList[j].Percentage ?? "0") + "%"
+                };
+                EntryScrapList.Add(ent2);
+            }
+
+            HeightScrapChart = EntryScrapList.Count * 50;
+            HeightScrapList = ScrapList.Count > 2 ? (ScrapList.Count * 55) : ScrapList.Count > 0 ? 160 : 0;
         }
-        private void LoadOEEUpToDown(string plant, string period)
+
+        private ScrapStats GetScraps()
+        {
+            ScrapStats ss = new ScrapStats();
+            ss.Today = new List<ScrapCountStats>()
+            {
+                new ScrapCountStats()
+                {
+                    Count = 2,
+                    Description = AppResources.CauseLabel + " 1"
+                },
+                new ScrapCountStats()
+                {
+                    Count = 4,
+                    Description = AppResources.CauseLabel + " 2"
+                },
+                new ScrapCountStats()
+                {
+                    Count = 3,
+                    Description = AppResources.CauseLabel + " 3"
+                },
+                new ScrapCountStats()
+                {
+                    Count = 1,
+                    Description = AppResources.CauseLabel + " 4"
+                },
+                new ScrapCountStats()
+                {
+                    Count = 4,
+                    Description = AppResources.CauseLabel + " 5"
+                },
+            };
+            ss.Week = new List<ScrapCountStats>()
+            {
+                new ScrapCountStats()
+                {
+                    Count = 4,
+                    Description = AppResources.CauseLabel + " 1"
+                },
+                new ScrapCountStats()
+                {
+                    Count = 6,
+                    Description = AppResources.CauseLabel + " 2"
+                },
+                new ScrapCountStats()
+                {
+                    Count = 5,
+                    Description = AppResources.CauseLabel + " 3"
+                },
+                new ScrapCountStats()
+                {
+                    Count = 3,
+                    Description = AppResources.CauseLabel + " 4"
+                },
+                new ScrapCountStats()
+                {
+                    Count = 6,
+                    Description = AppResources.CauseLabel + " 5"
+                },
+            };
+            ss.Month = new List<ScrapCountStats>()
+            {
+                new ScrapCountStats()
+                {
+                    Count = 7,
+                    Description = AppResources.CauseLabel + " 1"
+                },
+                new ScrapCountStats()
+                {
+                    Count = 10,
+                    Description = AppResources.CauseLabel + " 2"
+                },
+                new ScrapCountStats()
+                {
+                    Count = 8,
+                    Description = AppResources.CauseLabel + " 3"
+                },
+                new ScrapCountStats()
+                {
+                    Count = 6,
+                    Description = AppResources.CauseLabel + " 4"
+                },
+                new ScrapCountStats()
+                {
+                    Count = 11,
+                    Description = AppResources.CauseLabel + " 5"
+                },
+            };
+            return ss;
+        }
+
+        private void LoadOEEUpToDown()
         {
             CellList = new ObservableCollection<Cell>();
             Cell cell1 = new Cell()
             {
                 Id = "3",
-                Name = AppResources.CellLabel + " 3",
+                Name = "Celda 3",
                 OEE = "91%",
                 Status = "#00a889",
-                Progress = new Xamarin.Forms.Rectangle(0,0,.91,5),
+                Progress = new Xamarin.Forms.Rectangle(0, 0, .91, 5),
                 Metrics = new Metrics()
                 {
                     D = "90%",
@@ -765,7 +689,7 @@ namespace Flexbaze.ViewModels
             Cell cell2 = new Cell()
             {
                 Id = "4",
-                Name = AppResources.CellLabel + " 4",
+                Name = "Celda 4",
                 OEE = "88%",
                 Status = "#00a889",
                 Progress = new Xamarin.Forms.Rectangle(0, 0, .88, 5),
@@ -779,7 +703,7 @@ namespace Flexbaze.ViewModels
             Cell cell3 = new Cell()
             {
                 Id = "1",
-                Name = AppResources.CellLabel + " 1",
+                Name = "Celda 1",
                 OEE = "83%",
                 Status = "#d2434a",
                 Progress = new Xamarin.Forms.Rectangle(0, 0, .83, 5),
@@ -793,7 +717,7 @@ namespace Flexbaze.ViewModels
             Cell cell4 = new Cell()
             {
                 Id = "2",
-                Name = AppResources.CellLabel + " 2",
+                Name = "Celda 2",
                 OEE = "70%",
                 Status = "#d2434a",
                 Progress = new Xamarin.Forms.Rectangle(0, 0, .7, 5),
@@ -804,72 +728,10 @@ namespace Flexbaze.ViewModels
                     C = "76%"
                 }
             };
-            switch (plant)
-            {
-                case "M1":
-                    switch (period)
-                    {
-                        case "Today":
-                            CellList.Add(cell1);
-                            CellList.Add(cell2);
-                            CellList.Add(cell3);
-                            CellList.Add(cell4);
-                            break;
-                        case "Week":
-                            CellList.Add(cell2);
-                            CellList.Add(cell4);
-                            CellList.Add(cell3);
-                            CellList.Add(cell1);
-                            break;
-                        case "Month":
-                            CellList.Add(cell4);
-                            CellList.Add(cell2);
-                            CellList.Add(cell1);
-                            CellList.Add(cell3);
-                            break;
-                    }
-                    break;
-                case "M2":
-                    switch (period)
-                    {
-                        case "Today":
-                            CellList.Add(cell3);
-                            CellList.Add(cell2);
-                            break;
-                        case "Week":
-                            CellList.Add(cell3);
-                            CellList.Add(cell2);
-                            CellList.Add(cell4);
-                            break;
-                        case "Month":
-                            CellList.Add(cell3);
-                            CellList.Add(cell2);
-                            CellList.Add(cell4);
-                            CellList.Add(cell1);
-                            break;
-                    }
-                    break;
-                case "M3":
-                    switch (period)
-                    {
-                        case "Today":
-                            CellList.Add(cell4);
-                            CellList.Add(cell3);
-                            break;
-                        case "Week":
-                            CellList.Add(cell4);
-                            CellList.Add(cell3);
-                            CellList.Add(cell1);
-                            break;
-                        case "Month":
-                            CellList.Add(cell4);
-                            CellList.Add(cell3);
-                            CellList.Add(cell1);
-                            CellList.Add(cell2);
-                            break;
-                    }
-                    break;
-            }
+            CellList.Add(cell1);
+            CellList.Add(cell2);
+            CellList.Add(cell3);
+            CellList.Add(cell4);
             HeightListViewOEE = (30 * CellList.Count) + 10;
             OrderOEE = "DESC";
             CmdOrder = new Command((param) =>
@@ -947,315 +809,441 @@ namespace Flexbaze.ViewModels
             CellList = tempCells;
         }
 
-        private void LoadTickets(string plant, string period)
+        private void LoadTickets()
         {
-            OpenTicketList = new ObservableCollection<Ticket>();
-            InProcessTicketList = new ObservableCollection<Ticket>();
-            ClosedTicketList = new ObservableCollection<Ticket>();
-            CmdAssign = new Command((param) =>
-                    AssignTicket(param.ToString()));
-            CmdViewDetails = new Command((param) =>
-                            ViewDetails(param.ToString()));
-            Ticket ticket1 = new Ticket()
+            OpenTicketList = new ObservableCollection<TicketComplete>();
+            InProcessTicketList = new ObservableCollection<TicketComplete>();
+            ClosedTicketList = new ObservableCollection<TicketComplete>();
+            TicketComplete ticket1 = new TicketComplete()
             {
                 Id = "1",
-                Status = "Abierto",
-                ImgStatus = "open.png",
+                Cell = new CellType()
+                {
+                    Id = "1",
+                    Name = "C1"
+                },
+                Machine = new MachineType()
+                {
+                    Id = "1",
+                    Name = "TRO-011"
+                },
+                StartedAt = new DateTime(2020, 05, 22, 10, 12, 19),
+                EndedAtCommitment = new DateTime(),
+                EndedAt = new DateTime(),
+                Status = AppResources.OpenLabel,
+                ReportedBy = new UserType()
+                {
+                    Id = "4",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Juan",
+                    LastName = "Perez",
+                    Profile = new ProfileType()
+                    {
+                        Id = "3",
+                        Name = "Juan Perez",
+                        Picture = ""
+                    },
+                },
                 Description = AppResources.LackMaterial,
+                ImgStatus = "open.png",
                 Hour = "10:12 AM",
-                Machine = "M101",
-                OEE = "96%",
-                Cell = "C1",
                 TextButton = AppResources.AssignLabel,
+                Progress = new Rectangle(19, 30, 2, 40),
                 IsSelected = false,
                 ButtonBorder = "#336EF4",
                 CmdName = "CmdAssign",
-                CmdButton = (Command)CmdAssign
+                CmdAssign = new Command((param) =>
+                            AssignTicket((TicketComplete)param))
             };
-            Ticket ticket2 = new Ticket()
+            TicketComplete ticket2 = new TicketComplete()
             {
                 Id = "2",
-                Status = "Abierto",
+                Status = AppResources.OpenLabel,
                 ImgStatus = "open.png",
-                Description = AppResources.FailureMold + " 392",
-                Hour = "10:12 AM",
-                Machine = "M301",
-                OEE = "96%",
-                Cell = "C1",
-                IsSelected = false,
+                Description = AppResources.LackMaterial,
+                Hour = "10:16 PM",
+                Machine = new MachineType()
+                {
+                    Id = "2",
+                    Name = "CORT-007"
+                },
+                Cell = new CellType()
+                {
+                    Id = "1",
+                    Name = "C1"
+                },
+                StartedAt = new DateTime(2020, 05, 22, 22, 16, 19),
+                EndedAtCommitment = new DateTime(),
+                EndedAt = new DateTime(),
+                ReportedBy = new UserType()
+                {
+                    Id = "4",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Juan",
+                    LastName = "Perez",
+                    Profile = new ProfileType()
+                    {
+                        Id = "3",
+                        Name = "Juan Perez",
+                        Picture = ""
+                    },
+                },
                 TextButton = AppResources.AssignLabel,
+                Progress = new Rectangle(19, 0, 2, 35),
+                IsSelected = false,
                 ButtonBorder = "#336EF4",
                 CmdName = "CmdAssign",
-                CmdButton = (Command)CmdAssign
+                CmdAssign = new Command((param) =>
+                            AssignTicket((TicketComplete)param))
             };
-            Ticket ticket3 = new Ticket()
+            TicketComplete ticket3 = new TicketComplete()
             {
                 Id = "3",
-                Status = "En Proceso",
+                Status = AppResources.InProcessLabel,
                 ImgStatus = "clock.png",
-                Description = AppResources.Maintenance,
-                Hour = "10:12 AM",
-                Machine = "M101",
-                OEE = "96%",
-                Cell = "C1",
-                IsSelected = false,
+                Description = AppResources.LackMaterial,
+                Hour = "07:25 AM",
+                Machine = new MachineType()
+                {
+                    Id = "1",
+                    Name = "ROLA-003"
+                },
+                Cell = new CellType()
+                {
+                    Id = "1",
+                    Name = "C1"
+                },
+                StartedAt = new DateTime(2020, 05, 22, 07, 25, 19),
+                EndedAtCommitment = new DateTime(),
+                EndedAt = new DateTime(),
+                ReportedBy = new UserType()
+                {
+                    Id = "4",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Juan",
+                    LastName = "Perez",
+                    Profile = new ProfileType()
+                    {
+                        Id = "3",
+                        Name = "Juan Perez",
+                        Picture = ""
+                    },
+                },
+                AssignedTo = new UserType()
+                {
+                    Id = "2",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Ricardo",
+                    LastName = "García",
+                    Profile = new ProfileType()
+                    {
+                        Id = "2",
+                        Name = "Ricardo García",
+                        Picture = "https://flexbaze-demo.s3.amazonaws.com/pp.jpeg"
+                    },
+                },
                 TextButton = AppResources.DetailsLabel,
+                Progress = new Rectangle(19, 30, 2, 40),
+                IsSelected = false,
                 ButtonBorder = "#F88300",
                 CmdName = "CmdViewDetails",
-                CmdButton = (Command)CmdViewDetails
+                CmdViewDetails = new Command((param) =>
+                            ViewDetails((TicketComplete)param))
             };
-            Ticket ticket4 = new Ticket()
+            TicketComplete ticket4 = new TicketComplete()
             {
                 Id = "4",
-                Status = "En Proceso",
+                Status = AppResources.InProcessLabel,
                 ImgStatus = "clock.png",
-                Description = AppResources.LeakLabel,
-                Hour = "10:12 AM",
-                Machine = "M301",
-                OEE = "96%",
-                Cell = "C1",
-                IsSelected = false,
+                Description = AppResources.LackMaterial,
+                Hour = "03:33 PM",
+                StartedAt = new DateTime(2020, 05, 22, 15, 33, 19),
+                EndedAtCommitment = new DateTime(),
+                EndedAt = new DateTime(),
+                Machine = new MachineType()
+                {
+                    Id = "2",
+                    Name = "PREN-015"
+                },
+                Cell = new CellType()
+                {
+                    Id = "1",
+                    Name = "C1"
+                },
+                ReportedBy = new UserType()
+                {
+                    Id = "4",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Roberto",
+                    LastName = "Lee",
+                    Profile = new ProfileType()
+                    {
+                        Id = "3",
+                        Name = "Roberto Lee",
+                        Picture = ""
+                    },
+                },
+                AssignedTo = new UserType()
+                {
+                    Id = "2",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Luis",
+                    LastName = "García",
+                    Profile = new ProfileType()
+                    {
+                        Id = "2",
+                        Name = "Luis García",
+                        Picture = "https://flexbaze-demo.s3.amazonaws.com/pp.jpeg"
+                    },
+                },
                 TextButton = AppResources.DetailsLabel,
+                Progress = new Rectangle(19, 0, 2, 70),
+                IsSelected = false,
                 ButtonBorder = "#F88300",
                 CmdName = "CmdViewDetails",
-                CmdButton = (Command)CmdViewDetails
+                CmdViewDetails = new Command((param) =>
+                            ViewDetails((TicketComplete)param))
             };
-            Ticket ticket5 = new Ticket()
+            TicketComplete ticket5 = new TicketComplete()
             {
                 Id = "5",
-                Status = "En Proceso",
+                Status = AppResources.InProcessLabel,
                 ImgStatus = "clock.png",
-                Description = AppResources.MinorIncident,
-                Hour = "10:12 AM",
-                Machine = "M101",
-                OEE = "96%",
-                Cell = "C1",
-                IsSelected = false,
+                Description = AppResources.LackMaterial,
+                Hour = "11:45 PM",
+                StartedAt = new DateTime(2020, 05, 22, 23, 45, 19),
+                EndedAtCommitment = new DateTime(),
+                EndedAt = new DateTime(),
+                Machine = new MachineType()
+                {
+                    Id = "1",
+                    Name = "CIZ-021"
+                },
+                Cell = new CellType()
+                {
+                    Id = "1",
+                    Name = "C1"
+                },
+                ReportedBy = new UserType()
+                {
+                    Id = "4",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Dante",
+                    LastName = "Juárez",
+                    Profile = new ProfileType()
+                    {
+                        Id = "3",
+                        Name = "Dante Juárez",
+                        Picture = ""
+                    },
+                },
+                AssignedTo = new UserType()
+                {
+                    Id = "2",
+                    Groups = new List<GroupType>()
+                    {
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Luis",
+                    LastName = "García",
+                    Profile = new ProfileType()
+                    {
+                        Id = "2",
+                        Name = "Luis García",
+                        Picture = "https://flexbaze-demo.s3.amazonaws.com/pp.jpeg"
+                    },
+                },
                 TextButton = AppResources.DetailsLabel,
+                Progress = new Rectangle(19, 0, 2, 35),
+                IsSelected = false,
                 ButtonBorder = "#F88300",
                 CmdName = "CmdViewDetails",
-                CmdButton = (Command)CmdViewDetails
+                CmdViewDetails = new Command((param) =>
+                            ViewDetails((TicketComplete)param))
             };
-            Ticket ticket6 = new Ticket()
+            TicketComplete ticket6 = new TicketComplete()
             {
                 Id = "6",
-                Status = "Cerrado",
+                Status = AppResources.ClosedLabel,
                 ImgStatus = "done.png",
                 Description = AppResources.LackMaterial,
-                Hour = "10:12 AM",
-                Machine = "M101",
-                OEE = "96%",
-                Cell = "C1",
-                IsSelected = false,
-                TextButton = AppResources.DetailsLabel,
-                ButtonBorder = "#36A889",
-                CmdName = "CmdViewDetails",
-                CmdButton = (Command)CmdViewDetails
-            };
-            Ticket ticket7 = new Ticket()
-            {
-                Id = "7",
-                Status = "Abierto",
-                ImgStatus = "open.png",
-                Description = AppResources.Maintenance,
-                Hour = "10:15 AM",
-                Machine = "M102",
-                OEE = "93%",
-                Cell = "C2",
-                IsSelected = false,
-                TextButton = AppResources.DetailsLabel,
-                ButtonBorder = "#336EF4",
-                CmdName = "CmdAssign",
-                CmdButton = (Command)CmdAssign
-            };
-            Ticket ticket8 = new Ticket()
-            {
-                Id = "8",
-                Status = "Abierto",
-                ImgStatus = "open.png",
-                Description = AppResources.LeakLabel,
-                Hour = "10:24 AM",
-                Machine = "M301",
-                OEE = "99%",
-                Cell = "C3",
-                IsSelected = false,
-                TextButton = AppResources.DetailsLabel,
-                ButtonBorder = "#336EF4",
-                CmdName = "CmdAssign",
-                CmdButton = (Command)CmdAssign
-            };
-            Ticket ticket9 = new Ticket()
-            {
-                Id = "9",
-                Status = "En Proceso",
-                ImgStatus = "clock.png",
-                Description = AppResources.MinorIncident,
-                Hour = "11:47 AM",
-                Machine = "M103",
-                OEE = "86%",
-                Cell = "C3",
-                IsSelected = false,
-                TextButton = AppResources.DetailsLabel,
-                ButtonBorder = "#F88300",
-                CmdName = "CmdViewDetails",
-                CmdButton = (Command)CmdViewDetails
-            };
-            Ticket ticket10 = new Ticket()
-            {
-                Id = "10",
-                Status = "Cerrado",
-                ImgStatus = "done.png",
-                Description = AppResources.LackMaterial,
-                Hour = "08:33 AM",
-                Machine = "M102",
-                OEE = "95%",
-                Cell = "C1",
-                IsSelected = false,
-                TextButton = AppResources.DetailsLabel,
-                ButtonBorder = "#36A889",
-                CmdName = "CmdViewDetails",
-                CmdButton = (Command)CmdViewDetails
-            };
-            Ticket ticket11 = new Ticket()
-            {
-                Id = "11",
-                Status = "Cerrado",
-                ImgStatus = "done.png",
-                Description = AppResources.LackMaterial,
-                Hour = "03:49 PM",
-                Machine = "M103",
-                OEE = "88%",
-                Cell = "C3",
-                IsSelected = false,
-                TextButton = AppResources.DetailsLabel,
-                ButtonBorder = "#36A889",
-                CmdName = "CmdViewDetails",
-                CmdButton = (Command)CmdViewDetails
-            };
-            Ticket ticket12 = new Ticket()
-            {
-                Id = "12",
-                Status = "Cerrado",
-                ImgStatus = "done.png",
-                Description = AppResources.LackMaterial,
-                Hour = "06:18 PM",
-                Machine = "M102",
-                OEE = "90%",
-                Cell = "C2",
-                IsSelected = false,
-                TextButton = AppResources.DetailsLabel,
-                ButtonBorder = "#36A889",
-                CmdName = "CmdViewDetails",
-                CmdButton = (Command)CmdViewDetails
-            };
-            switch (plant)
-            {
-                case "M1":
-                    switch (period)
+                Hour = "11:11 AM",
+                Machine = new MachineType()
+                {
+                    Id = "1",
+                    Name = "PUNZ-008"
+                },
+                Cell = new CellType()
+                {
+                    Id = "1",
+                    Name = "C1"
+                },
+                StartedAt = new DateTime(2020, 05, 22, 11, 11, 19),
+                EndedAtCommitment = new DateTime(),
+                EndedAt = new DateTime(),
+                ReportedBy = new UserType()
+                {
+                    Id = "4",
+                    Groups = new List<GroupType>()
                     {
-                        case "Today":
-                            OpenTicketList.Add(ticket1);
-                            OpenTicketList.Add(ticket2);
-                            InProcessTicketList.Add(ticket3);
-                            InProcessTicketList.Add(ticket4);
-                            ClosedTicketList.Add(ticket6);
-                            break;
-                        case "Week":
-                            OpenTicketList.Add(ticket1);
-                            OpenTicketList.Add(ticket2);
-                            OpenTicketList.Add(ticket7);
-                            InProcessTicketList.Add(ticket3);
-                            InProcessTicketList.Add(ticket4);
-                            InProcessTicketList.Add(ticket9);
-                            ClosedTicketList.Add(ticket6);
-                            ClosedTicketList.Add(ticket10);
-                            break;
-                        case "Month":
-                            OpenTicketList.Add(ticket1);
-                            OpenTicketList.Add(ticket2);
-                            OpenTicketList.Add(ticket7);
-                            OpenTicketList.Add(ticket8);
-                            InProcessTicketList.Add(ticket3);
-                            InProcessTicketList.Add(ticket4);
-                            InProcessTicketList.Add(ticket9);
-                            InProcessTicketList.Add(ticket5);
-                            ClosedTicketList.Add(ticket6);
-                            ClosedTicketList.Add(ticket10);
-                            ClosedTicketList.Add(ticket11);
-                            break;
-                    }
-                    break;
-                case "M2":
-                    switch (period)
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "Dante",
+                    LastName = "Juárez",
+                    Profile = new ProfileType()
                     {
-                        case "Today":
-                            OpenTicketList.Add(ticket7);
-                            OpenTicketList.Add(ticket1);
-                            InProcessTicketList.Add(ticket9);
-                            InProcessTicketList.Add(ticket3);
-                            ClosedTicketList.Add(ticket11);
-                            break;
-                        case "Week":
-                            OpenTicketList.Add(ticket7);
-                            OpenTicketList.Add(ticket1);
-                            OpenTicketList.Add(ticket8);
-                            InProcessTicketList.Add(ticket9);
-                            InProcessTicketList.Add(ticket3);
-                            InProcessTicketList.Add(ticket5);
-                            ClosedTicketList.Add(ticket11);
-                            ClosedTicketList.Add(ticket10);
-                            break;
-                        case "Month":
-                            OpenTicketList.Add(ticket7);
-                            OpenTicketList.Add(ticket1);
-                            OpenTicketList.Add(ticket8);
-                            OpenTicketList.Add(ticket2);
-                            InProcessTicketList.Add(ticket9);
-                            InProcessTicketList.Add(ticket3);
-                            InProcessTicketList.Add(ticket5);
-                            InProcessTicketList.Add(ticket4);
-                            ClosedTicketList.Add(ticket11);
-                            ClosedTicketList.Add(ticket10);
-                            ClosedTicketList.Add(ticket6);
-                            break;
-                    }
-                    break;
-                case "M3":
-                    switch (period)
+                        Id = "3",
+                        Name = "Dante Juárez",
+                        Picture = ""
+                    },
+                },
+                AssignedTo = new UserType()
+                {
+                    Id = "2",
+                    Groups = new List<GroupType>()
                     {
-                        case "Today":
-                            OpenTicketList.Add(ticket8);
-                            OpenTicketList.Add(ticket7);
-                            InProcessTicketList.Add(ticket5);
-                            InProcessTicketList.Add(ticket9);
-                            ClosedTicketList.Add(ticket11);
-                            break;
-                        case "Week":
-                            OpenTicketList.Add(ticket8);
-                            OpenTicketList.Add(ticket7);
-                            OpenTicketList.Add(ticket2);
-                            InProcessTicketList.Add(ticket5);
-                            InProcessTicketList.Add(ticket9);
-                            InProcessTicketList.Add(ticket4);
-                            ClosedTicketList.Add(ticket11);
-                            ClosedTicketList.Add(ticket6);
-                            break;
-                        case "Month":
-                            OpenTicketList.Add(ticket8);
-                            OpenTicketList.Add(ticket7);
-                            OpenTicketList.Add(ticket2);
-                            OpenTicketList.Add(ticket1);
-                            InProcessTicketList.Add(ticket5);
-                            InProcessTicketList.Add(ticket9);
-                            InProcessTicketList.Add(ticket4);
-                            InProcessTicketList.Add(ticket3);
-                            ClosedTicketList.Add(ticket11);
-                            ClosedTicketList.Add(ticket6);
-                            ClosedTicketList.Add(ticket10);
-                            break;
+                      new GroupType()
+                      {
+                          Id = "4",
+                            Name = "technician"
+                      }
+                    },
+                    FirstName = "José",
+                    LastName = "Loera",
+                    Profile = new ProfileType()
+                    {
+                        Id = "2",
+                        Name = "Jose Loera",
+                        Picture = "https://flexbaze-demo.s3.amazonaws.com/pp.jpeg"
+                    },
+                },
+                Events = new List<TicketEventType>()
+                {
+                    new TicketEventType()
+                    {
+                        Id = "14",
+                        Description = "Hola",
+                        Timestamp = new DateTime(2021,05,24,16,45,03),
+                        EventType = "Detail",
+                        User = new UserType()
+                        {
+                            Profile = new ProfileType()
+                            {
+                                Picture = "",
+                                Name = ""
+                            }
+                        }
+                    },
+                    new TicketEventType()
+                    {
+                        Id = "15",
+                        Description = "H",
+                        Timestamp = new DateTime(2021,05,26,19,55,43),
+                        EventType = "Detail",
+                        User = new UserType()
+                        {
+                            Profile = new ProfileType()
+                            {
+                                Picture = "",
+                                Name = ""
+                            }
+                        }
+                    },
+                    new TicketEventType()
+                    {
+                        Id = "16",
+                        Description = "Hola",
+                        Timestamp = new DateTime(2021,06,09,16,46,02),
+                        EventType = "Detail",
+                        User = new UserType()
+                        {
+                            Profile = new ProfileType()
+                            {
+                                Picture = "",
+                                Name = ""
+                            }
+                        }
+                    },
+                    new TicketEventType()
+                    {
+                        Id = "17",
+                        Description = "Ticket cerrado",
+                        Timestamp = new DateTime(2021,06,09,16,46,18),
+                        EventType = null,
+                        User = null
                     }
-                    break;
-            }
+                },
+                TextButton = AppResources.DetailsLabel,
+                Progress = new Rectangle(19, 30, 0, 0),
+                IsSelected = false,
+                ButtonBorder = "#36A889",
+                CmdName = "CmdViewDetails",
+                CmdViewDetails = new Command((param) =>
+                            ViewDetails((TicketComplete)param))
+            };
+            OpenTicketList.Add(ticket1);
+            OpenTicketList.Add(ticket2);
+            InProcessTicketList.Add(ticket3);
+            InProcessTicketList.Add(ticket4);
+            InProcessTicketList.Add(ticket5);
+            ClosedTicketList.Add(ticket6);
             HeightListViewOpen = (65 * OpenTicketList.Count) + 10;
             HeightListViewInProcess = (65 * InProcessTicketList.Count) + 10;
             HeightListViewClosed = (65 * ClosedTicketList.Count) + 10;
@@ -1263,42 +1251,32 @@ namespace Flexbaze.ViewModels
 
         private void LoadDropDown()
         {
-            PlantList = new List<string>();
-            PlantList.Add("M1");
-            PlantList.Add("M2");
-            PlantList.Add("M3");
-            PlantSelected = "M1";
+            PlantList = new List<FactoryType>();
+            PlantList.Add(new FactoryType() { Id = "1", Name = "M1" });
+            PlantList.Add(new FactoryType() { Id = "1", Name = "M2" });
+            PlantList.Add(new FactoryType() { Id = "1", Name = "M3" });
+            PlantSelected = PlantList[0];
         }
 
-        public async void ViewDetails(string ticketId)
+        public void ViewDetails(TicketComplete ticket)
         {
-            string status = GetStatus(ticketId);
-            await App.MasterDP.Detail.Navigation.PushAsync(new SupportDetail(ticketId, status));
-        }
-
-        public string GetStatus(string ticketId)
-        {
-            string status = string.Empty;
-            foreach (Ticket t in InProcessTicketList)
+            if (ticket != null)
             {
-                if (t.Id == ticketId)
-                {
-                    return AppResources.InProcessLabel;
-                }
+                NavigationHandler.ViewDetailsTicketAsync(ticket, PlantSelected.Id);
             }
-            foreach (Ticket t in ClosedTicketList)
+        }
+        public void AssignTicket(TicketComplete ticket)
+        {
+            if (ticket != null)
             {
-                if (t.Id == ticketId)
-                {
-                    return AppResources.ClosedLabel;
-                }
+                NavigationHandler.AssignTicketAsync(ticket.Id, ticket.Status);
             }
-            return status;
         }
 
-        public void AssignTicket(string ticketId)
+        public interface INavigationHandler
         {
-            Console.WriteLine(ticketId);
+            void AssignTicketAsync(string ticketId, string status);
+            void ViewDetailsTicketAsync(TicketComplete ticket, string factory);
         }
     }
 }

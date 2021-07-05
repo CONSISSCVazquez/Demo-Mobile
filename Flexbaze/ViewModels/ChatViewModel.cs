@@ -10,6 +10,7 @@ namespace Flexbaze.ViewModels
     class ChatViewModel : INotifyPropertyChanged
     {
         private Request _request = new Request();
+        private INavigation _navigation;
         private ObservableCollection<Chat> _chatList;
         private double _heightListViewChat;
 
@@ -35,8 +36,9 @@ namespace Flexbaze.ViewModels
             }
         }
 
-        public ChatViewModel()
+        public ChatViewModel(INavigation nav)
         {
+            _navigation = nav;
             Ini();
         }
 
@@ -98,7 +100,7 @@ namespace Flexbaze.ViewModels
 
         private async void GetChatDetail(string id)
         {
-            await App.MasterDP.Detail.Navigation.PushAsync(new ChatViewDetail(id));
+            await _navigation.PushAsync(new ChatViewDetail(id));
         }
     }
 }

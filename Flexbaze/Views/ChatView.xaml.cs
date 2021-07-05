@@ -11,13 +11,13 @@ namespace Flexbaze.Views
         public ChatView()
         {
             InitializeComponent();
-            BindingContext = new ChatViewModel();
+            BindingContext = new ChatViewModel(Navigation);
         }
 
         private async void ChatDetail(object sender, SelectionChangedEventArgs e)
         {
             Chat itemSelected = (Chat)e.CurrentSelection[0];
-            await App.MasterDP.Detail.Navigation.PushAsync(new ChatViewDetail(itemSelected.Id));
+            await Navigation.PushAsync(new ChatViewDetail(itemSelected.Id));
         }
     }
 }

@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:resources="clr-namespace:Flexbaze.Resources"
+             mc:Ignorable="d"
+             x:Class="Flexbaze.Views.SupportDetailAssign"
+             BackgroundColor="{StaticResource main}">
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal"
+            VerticalOptions="Center"
+            Padding="0,0,40,0"
+            Spacing="10">
+            <Label
+               Text="{x:Static resources:AppResources.AssignLabel}"
+               TextColor="White"
+               FontSize="14"
+               FontAttributes="Bold"
+               VerticalTextAlignment="Center"
+               HorizontalOptions="CenterAndExpand"/>
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical">
+            <StackLayout Orientation="Horizontal"
+                BackgroundColor="Transparent"
+                HeightRequest="40"
+                Padding="0,0,10,10">
+                <Frame Margin="20,0,0,0"
+                    Padding="10,0,0,0"
+                    BackgroundColor="{StaticResource dropDark}"
+                    HorizontalOptions="FillAndExpand">
+                    <StackLayout Orientation="Horizontal"
+                        Padding="0"
+                        Margin="0"
+                        BackgroundColor="Transparent">
+                        <ImageButton Source="search.png"
+                            Padding="0"
+                            BackgroundColor="{StaticResource dropDark}"
+                            HorizontalOptions="Start"/>
+                        <Entry Placeholder="{x:Static resources:AppResources.SearchLabel}"
+                            Margin="0"
+                            BackgroundColor="{StaticResource dropDark}"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"
+                            FontFamily="Muli"
+                            TextChanged="Entry_TextChanged"
+                            PlaceholderColor="{StaticResource TextMasterMenu}"/>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+            <CollectionView Grid.Row="1"
+                            HeightRequest="{Binding HeightListViewUser}"
+                            ItemsSource="{Binding UserList}"
+                            SelectionChangedCommand="{Binding CmdSelectedUser}"
+                            SelectionChangedCommandParameter="1"
+                            SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Frame HasShadow="False"
+                                   IsClippedToBounds="True"
+                                   Grid.RowSpan="3"
+                                   Grid.Column="0"
+                                   BackgroundColor="Transparent"
+                                   Margin="20,10,10,10"
+                                   Padding="0"
+                                   CornerRadius="25">
+                                <Image Source="{Binding Profile.Picture}"
+                                   HeightRequest="50"
+                                   WidthRequest="50"/>
+                            </Frame>
+                            <Label Text="{Binding Profile.Name}"
+                                   Grid.Row="1"
+                                   Grid.Column="1"
+                                   FontSize="Small"
+                                   FontFamily="Muli"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="StartAndExpand"
+                                   VerticalOptions="FillAndExpand"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Button Text="{x:Static resources:AppResources.AssignLabel}"
+                    BackgroundColor="{StaticResource bright}"
+                    HorizontalOptions="Center"
+                    HeightRequest="38"
+                    CornerRadius="4"
+                    WidthRequest="272"
+                    Command="{Binding CmdAssign}"
+                    CommandParameter="{Binding SelectedUser}"
+                    Margin="0,0,0,20"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
